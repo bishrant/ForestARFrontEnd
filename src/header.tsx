@@ -12,6 +12,7 @@ const Header = () => {
                
                 <Link to="/" color="inherit"> <Button color="secondary">Home</Button></Link>
                 <Link to="/addanchor"> <Button color="secondary">Add Anchor</Button></Link>
+                <Link to="/addnew"> <Button color="secondary">Add New</Button></Link>
 
             </Toolbar>
         </AppBar>

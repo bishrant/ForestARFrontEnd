@@ -41,7 +41,7 @@ const ImageCard = (props: any) => {
           </Typography>
           <CardMedia
             className={classes.media}
-            image={"https://txfipdev.tfs.tamu.edu/forestar/" + props.image.imageName}
+            image={"http://localhost:5000/" + props.image.imageName}
             title="Contemplative Reptile"
           />
           <Typography variant="body2" component="p">

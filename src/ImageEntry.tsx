@@ -10,7 +10,7 @@ const ImageEntryComp = () => {
 
    
     useEffect(() => {
-        axios.get('http://128.194.233.9:5000/getimages')
+        axios.get('http://localhost:5000/getimages')
         .then((d: any) => {
             console.log(d);
             setImages(d.data);

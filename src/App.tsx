@@ -8,6 +8,7 @@ import {
 import Home from './Home';
 import Header from './header';
 import AddImageAnchor from './AddImageAnchor';
+// import AddNew from './AddNew.jsx';
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
         <Route exact path="/addanchor">
           <AddImageAnchor/>
         </Route>
+
         
       </Switch>
     </Router>
