@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { CardMedia, CardActionArea } from '@material-ui/core';
+import { CardMedia, CardActionArea, Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
   card: {
@@ -27,14 +29,25 @@ const useStyles = makeStyles({
     height: 210,
     width: "auto",
     backgroundSize: 'contain'
+  },
+  deleteBtn: {
+      maxHeight: '100px',
+      margin: 'auto'
   }
 });
 
+const goToUpdate = (history: any, id: any)  => {
+  console.log("need to go to ", id)
+  history.push("/editanchor/"+ id);
+}
+
+
 const ImageCard = (props: any) => {
+  const history = useHistory();
   const classes = useStyles();
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
+    <Card className={classes.card}  >
+      <CardActionArea onClick={() => { goToUpdate(history, props.image.id)}}>
         <CardContent>
           <Typography className={classes.title} color="textPrimary" gutterBottom>
             {props.image.title}
@@ -51,6 +64,12 @@ const ImageCard = (props: any) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <Button variant="outlined" color="primary" 
+      className={classes.deleteBtn}
+      startIcon={<DeleteIcon />}
+      onClick={() => {props.onDelete(props.image.id)}}
+      >
+      Delete</Button>
     </Card>
   );
 }

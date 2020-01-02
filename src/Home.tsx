@@ -9,7 +9,7 @@ const Home = () => {
       <React.Fragment>
       <CssBaseline />
       <Container maxWidth="sm">
-          <ImageEntryComp/>
+          <ImageEntryComp />
         <Typography component="div" style={{height: '100vh' }} />
       </Container>
     </React.Fragment>
