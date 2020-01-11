@@ -10,6 +10,7 @@ import Header from './header';
 import AddImageAnchor from './Add/AddImageAnchor';
 import AddNew from './AddNew.jsx';
 import Update from './Update/Update';
+import Register from './form/form';
 
 
 
@@ -32,6 +33,10 @@ export default function App() {
         <Route exact path="/addnew">
           <AddNew/>
         </Route>
+        <Route exact path="/register">
+          <Register/>
+        </Route>
+
         <Route path="/update/:id" children={<Update />} />
       </Switch>
     </Router>

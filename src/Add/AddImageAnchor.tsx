@@ -148,6 +148,29 @@ export default function AddImageAnchor() {
                     {imageFile && (<Button variant="contained" color="primary" onClick={clearImage} className={classes.cancelBtn}>X</Button>)}
                 </div>
 
+
+                <TextValidator name="url" required label="URL link to webpage"
+                    placeholder="Enter URL link to webpage" variant="outlined"
+                    className={classes.fullWidth} fullWidth
+                    onChange={handleChange}
+                    validators={['required']}
+                    value={form.url}
+                    errorMessages={['URL is required']}
+                />
+
+                
+                <TextValidator name="description" required label="Description"
+                    placeholder="Enter description" variant="outlined"
+                    className={classes.fullWidth} fullWidth
+                    onChange={handleChange}
+                    validators={['required']}
+                    value={form.description}
+                    rows={2}
+                    rowsMax={5}
+                    errorMessages={['URL is required']}
+                />
+
+
                 <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon />}>Submit</Button>
 
 
@@ -162,10 +185,7 @@ export default function AddImageAnchor() {
                 onSubmit={onFormSubmit}
             >
 
-                <TextField name="url" required label="URL" placeholder="Enter your link here"
-                    variant="outlined" className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                />
+
 
                 <TextField name="description" required label="Enter detailed description about your content."
                     variant="outlined" className={classes.fullWidth} fullWidth
