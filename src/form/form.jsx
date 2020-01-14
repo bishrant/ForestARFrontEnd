@@ -1,8 +1,7 @@
-import React, { Component, useState } from 'react';
-import { render } from 'react-dom';
+import React, { useState } from 'react';
 import './form.css';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import ValidateText from './ValidateText';
 
 
 const validateForm = (errors) => {
@@ -13,6 +12,7 @@ const validateForm = (errors) => {
   );
   return valid;
 }
+
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -48,21 +48,25 @@ export default function Register() {
       default:
         break;
     }
-    console.log(error);
     setErrors(error);
-    console.log(errors)
-    // this.setState({errors, [name]: value});
+  }
 
+  const RedDiv = (props) => {
+    return <div>Red
 
+      {props.children}
+    </div>
+  }
+
+  const checkName = (val) => {
+    return val.length > 5;
   }
 
   return (
     <div className='wrapper'>
       <div className='form-wrapper'>
         <h2>Register</h2>
-        <form
-          //  onSubmit={this.handleSubmit} 
-          noValidate >
+        <form  noValidate >
 
 
           <TextField
@@ -94,6 +98,9 @@ export default function Register() {
           <div className='submit'>
             <button>Create</button>
           </div>
+          <RedDiv> Test</RedDiv>
+          <ValidateText rows={2} multiline={true} name='fullName' validator={checkName} errorMsg ="Name must be 5 characters" label='Name'/>
+           
         </form>
       </div>
     </div>

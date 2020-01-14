@@ -11,11 +11,14 @@ import AddImageAnchor from './Add/AddImageAnchor';
 import AddNew from './AddNew.jsx';
 import Update from './Update/Update';
 import Register from './form/form';
+import { MuiThemeProvider } from '@material-ui/core';
+import theme from './Add/theme';
 
 
 
 export default function App() {
   return (
+    <MuiThemeProvider theme={theme}>
     <Router>
       <div>
         <Header/>
@@ -40,5 +43,6 @@ export default function App() {
         <Route path="/update/:id" children={<Update />} />
       </Switch>
     </Router>
+    </MuiThemeProvider>
   )
 }

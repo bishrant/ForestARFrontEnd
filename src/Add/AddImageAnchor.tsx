@@ -7,12 +7,12 @@ import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 import axios from 'axios';
 import useStyles from './AddImageStyle';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { IFormData } from './IFormData';
 import { useParams } from 'react-router';
+import ValidateText from '../form/ValidateText';
 
 export default function AddImageAnchor() {
-    let {id} = useParams();
+    let { id } = useParams();
     // const id = props.id;
     const classes = useStyles();
     const [uploadStatus, setUploadStatus] = useState();
@@ -29,15 +29,15 @@ export default function AddImageAnchor() {
     const [videoFile, setVideoFile] = useState();
     const [videoFileName, setVideoFileName] = useState();
     const [videoFileKey, setVideoFileKey] = useState();
-    
+
     useEffect(() => {
-       if (typeof id !== 'undefined' && id !== null) {
-           console.log(id)
-            axios.get('http://localhost:5000/getAnchorDetails/?id='+ id)
-            .then((d: any) => {
-                console.log(d);
-                setForm(d.data[0]);
-            })
+        if (typeof id !== 'undefined' && id !== null) {
+            console.log(id)
+            axios.get('http://localhost:5000/getAnchorDetails/?id=' + id)
+                .then((d: any) => {
+                    console.log(d);
+                    setForm(d.data[0]);
+                })
         }
     }, [id])
 
@@ -85,53 +85,107 @@ export default function AddImageAnchor() {
         })
     }
 
-    const onFormSubmit = (event: any) => {
+    const onFormSubmit = async (event: any) => {
         event.preventDefault();
-        const serverUrl = "http://localhost:5000/addAnchor";
-        const formData = new FormData();
+        const errors = { ...formError };
+        let invalid: boolean[] = [];
 
-        Object.keys(form).map((keyName, i) => {
-            formData.append(keyName, form[keyName]);
-            return null;
-        })
-        const config = {headers: {'content-type': 'multipart/form-data'}}
 
-        axios.post(serverUrl, formData, config)
-            .then(
-                (s: any) => {
-                    setUploadStatus("successfully updated");
+        for (var idx = 0; idx < Object.keys(formError).length; idx++) {
+            const errorsForField: any = [];
+            const k = Object.keys(formError)[idx];
+            for (var v = 0; v < formValidators[k].validator.length; v++) {
+                const validatorFunc = formValidators[k]['validator'][v];
+                const isValid = validatorFunc(editForm[k]);
+                if (!isValid) {
+                    errorsForField.push(formValidators[k]['messages'][v])
                 }
-            )
-            .catch((e: any) => {
-                setUploadStatus("error uploading")
-            })
+            }
+            errors[k] = errorsForField;
+            if (errorsForField.length > 0) invalid.push(true);
+        }
+        setFormError(errors);
+        if (invalid.includes(true)) return;
+        console.log("need to submit form")
+        // const serverUrl = "http://localhost:5000/addAnchor";
+        // const formData = new FormData();
+
+        // Object.keys(form).map((keyName, i) => {
+        //     formData.append(keyName, form[keyName]);
+        //     return null;
+        // })
+        // const config = {headers: {'content-type': 'multipart/form-data'}}
+
+        // axios.post(serverUrl, formData, config)
+        //     .then(
+        //         (s: any) => {
+        //             setUploadStatus("successfully updated");
+        //         }
+        //     )
+        //     .catch((e: any) => {
+        //         setUploadStatus("error uploading")
+        //     })
+    }
+    const isNull = (val: any) => {
+        return (typeof val === undefined || val === '');
+    }
+    const [editForm, setEditForm] = useState<any>({
+        title: '',
+        description: '',
+        url: ''
+    });
+    const urlValidator = async (url: string) => {
+        const r = await axios.get(url).catch((e: any) => { return true })
+        return false;
+    }
+    const requiredValidator = (val: any) => !isNull(val);
+    const length10 = (val: any) => val.length > 10;
+
+    const formValidators: any = {
+        title: { validator: [requiredValidator, length10], messages: ["Title is required", "Length should be at least 10 characters"] },
+        description: { validator: [requiredValidator], messages: ["Description is required"] },
+        url: { validator: [requiredValidator], messages: ["URL is required"] },
+    }
+    const [formError, setFormError] = useState<any>({
+        title: [],
+        description: [],
+        url: ''
+    });
+
+    const checkForError = (name: any, value: any) => {
+        setFormError({
+            ...formError,
+            [name]: isNull(value)
+        });
+        return isNull(value);
+    }
+
+
+    const handleChanges = (e: any) => {
+        setEditForm({
+            ...editForm,
+            [e.target.name]: e.target.value
+        });
+        checkForError(e.target.name, e.target.value);
     }
 
     return (
         <div className={classes.container} key={'container'}>
             <div>{uploadStatus}</div>
-            <ValidatorForm
+            <form
                 noValidate
-                onSubmit={onFormSubmit}
-            >
-                <TextValidator name="title" required label="Title"
-                    placeholder="Enter title here" variant="outlined"
-                    className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    validators={['required']}
-                    value={form.title}
-                    errorMessages={['title is required']}
-                />
+                onSubmit={onFormSubmit}>
 
+                <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
+                <hr />
+                <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
+                    label='Description' value={editForm.description} onChange={handleChanges} />
+
+                <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='URL' value={editForm.url} onChange={handleChanges} />
 
                 <input accept="image/png, image/jpeg, image/jpg"
-                    className={classes.input}
-                    id="uploadImages"
-                    type="file"
-                    name="imageFile"
-                    onChange={handImageFileChange}
-                    key={imageFileKey || 'im'}
-                    required
+                    className={classes.input}  id="uploadImages" type="file"  name="imageFile"  onChange={handImageFileChange}
+                    key={imageFileKey || 'im'}       required
                 />
                 <label htmlFor="uploadImages" className={classes.fullWidth}>
                     <Button variant="contained" color="primary" component="span"
@@ -147,34 +201,12 @@ export default function AddImageAnchor() {
                     />
                     {imageFile && (<Button variant="contained" color="primary" onClick={clearImage} className={classes.cancelBtn}>X</Button>)}
                 </div>
-
-
-                <TextValidator name="url" required label="URL link to webpage"
-                    placeholder="Enter URL link to webpage" variant="outlined"
-                    className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    validators={['required']}
-                    value={form.url}
-                    errorMessages={['URL is required']}
-                />
-
-                
-                <TextValidator name="description" required label="Description"
-                    placeholder="Enter description" variant="outlined"
-                    className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    validators={['required']}
-                    value={form.description}
-                    rows={2}
-                    rowsMax={5}
-                    errorMessages={['URL is required']}
-                />
-
-
-                <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon />}>Submit</Button>
-
-
-            </ValidatorForm>
+                <br />
+                <div className={classes.fullWidth}>
+                    <br /><hr/>
+                    <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon />} >Submit</Button>
+                </div>
+            </form>
 
             <br />
 
@@ -183,9 +215,8 @@ export default function AddImageAnchor() {
                 method="POST"
                 encType="multipart/form-data"
                 onSubmit={onFormSubmit}
+                style={{ display: "none" }}
             >
-
-
 
                 <TextField name="description" required label="Enter detailed description about your content."
                     variant="outlined" className={classes.fullWidth} fullWidth

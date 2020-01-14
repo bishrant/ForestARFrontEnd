@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         fullWidth: {
             width: '100%',
-            maxWidth: '400px',
             display: 'block',
             textAlign: 'center',
             margin: 'auto',
