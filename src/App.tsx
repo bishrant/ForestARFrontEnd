@@ -10,9 +10,8 @@ import Header from './header';
 import AddImageAnchor from './Add/AddImageAnchor';
 import AddNew from './AddNew.jsx';
 import Update from './Update/Update';
-import Register from './form/form';
 import { MuiThemeProvider } from '@material-ui/core';
-import theme from './Add/theme';
+import {theme} from './Add/theme';
 
 
 
@@ -36,9 +35,7 @@ export default function App() {
         <Route exact path="/addnew">
           <AddNew/>
         </Route>
-        <Route exact path="/register">
-          <Register/>
-        </Route>
+
 
         <Route path="/update/:id" children={<Update />} />
       </Switch>

@@ -1,88 +1,33 @@
 import React, { useState, useEffect } from 'react';
-
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 import axios from 'axios';
 import useStyles from './AddImageStyle';
-import { IFormData } from './IFormData';
 import { useParams } from 'react-router';
 import ValidateText from '../form/ValidateText';
+
+import { theme, errorTheme } from './theme';
+import { MuiThemeProvider } from '@material-ui/core';
 
 export default function AddImageAnchor() {
     let { id } = useParams();
     // const id = props.id;
     const classes = useStyles();
     const [uploadStatus, setUploadStatus] = useState();
-    const [form, setForm] = useState<IFormData>({
-        id: null,
-        title: '',
-        url: '',
-        description: '',
-        imageFile: '',
-        videoFile: ''
-    })
-    const [imageFile, setImageFile] = useState();
-    const [imageFileKey, setImageFileKey] = useState();
-    const [videoFile, setVideoFile] = useState();
-    const [videoFileName, setVideoFileName] = useState();
-    const [videoFileKey, setVideoFileKey] = useState();
-
     useEffect(() => {
         if (typeof id !== 'undefined' && id !== null) {
-            console.log(id)
             axios.get('http://localhost:5000/getAnchorDetails/?id=' + id)
                 .then((d: any) => {
                     console.log(d);
-                    setForm(d.data[0]);
+                    // setForm(d.data[0]);
                 })
         }
     }, [id])
 
-
-    // const handleFileChange = (event: any, type: string) 
-
-    const handImageFileChange = (event: any) => {
-        console.log(event);
-        setForm({
-            ...form,
-            "imageFile": event.target.files[0]
-        })
-        setImageFile(URL.createObjectURL(event.target.files[0]));
-    }
-
-    const handleVideoFileChange = (event: any) => {
-        console.log(videoFile);
-        if (videoFile !== null) {
-            setVideoFile(event.target.files[0]);
-        }
-        if (event.target.files.length > 0) {
-            setVideoFile(URL.createObjectURL(event.target.files[0]));
-        }
-        setVideoFileName(event.target.files[0].name);
-        console.log(event.target.files[0].name)
-    }
-
-    const clearImage = (event: any) => {
-        setImageFileKey(Date.now());
-        setImageFile(undefined);
-        setImageFileKey(undefined)
-    }
-
-    const clearVideo = (event: any) => {
-        setVideoFileKey(Date.now());
-        setVideoFile(undefined);
-        setVideoFileName(undefined)
-    }
-
-    const handleChange = (event: any) => {
-        const _value = event.target.value;
-        setForm({
-            ...form,
-            [event.target.name]: _value
-        })
+    const clearInput= (name: any) => {
+        setEditForm({...editForm, [name]: ''})
     }
 
     const onFormSubmit = async (event: any) => {
@@ -127,17 +72,20 @@ export default function AddImageAnchor() {
         //     })
     }
     const isNull = (val: any) => {
+        console.log(val);
         return (typeof val === undefined || val === '');
     }
     const [editForm, setEditForm] = useState<any>({
         title: '',
         description: '',
-        url: ''
+        url: '',
+        image: '',
+        video: '',
+        physicalHeight: '',
+        physicalWidth: '',
+        sharingText: ''
     });
-    const urlValidator = async (url: string) => {
-        const r = await axios.get(url).catch((e: any) => { return true })
-        return false;
-    }
+
     const requiredValidator = (val: any) => !isNull(val);
     const length10 = (val: any) => val.length > 10;
 
@@ -145,28 +93,50 @@ export default function AddImageAnchor() {
         title: { validator: [requiredValidator, length10], messages: ["Title is required", "Length should be at least 10 characters"] },
         description: { validator: [requiredValidator], messages: ["Description is required"] },
         url: { validator: [requiredValidator], messages: ["URL is required"] },
+        image: { validator: [requiredValidator], messages: ["Image is required"] },
+        video: { validator: [requiredValidator], messages: ["Video is required"] },
+        physicalHeight: { validator: [requiredValidator], messages: ["Physical height is required"] },
+        physicalWidth: { validator: [requiredValidator], messages: ["Physical width is required"] },
+        sharingText: { validator: [requiredValidator], messages: ["Sharing text is required"] }
     }
     const [formError, setFormError] = useState<any>({
         title: [],
         description: [],
-        url: ''
+        url: '',
+        image: [],
+        video: [],
+        physicalHeight: [],
+        physicalWidth: [],
+        sharingText: []
     });
 
     const checkForError = (name: any, value: any) => {
+        const err = !formValidators[name]['validator'][0](value);
         setFormError({
             ...formError,
-            [name]: isNull(value)
+            [name]: err ? [formValidators[name]['messages'][0]]: []
         });
-        return isNull(value);
     }
 
 
     const handleChanges = (e: any) => {
-        setEditForm({
-            ...editForm,
-            [e.target.name]: e.target.value
-        });
-        checkForError(e.target.name, e.target.value);
+        const _name = e.target.name;
+        if (e.target.name === 'image' || e.target.name === 'video') {
+            const _file = e.target.files[0];
+            setEditForm({
+                ...editForm,
+                [_name]: URL.createObjectURL(_file)
+            });
+          
+            
+            checkForError(e.target.name, e.target.files[0]);
+        } else {
+            setEditForm({
+                ...editForm,
+                [_name]: e.target.value
+            });
+            checkForError(_name, e.target.value);
+        }
     }
 
     return (
@@ -177,90 +147,74 @@ export default function AddImageAnchor() {
                 onSubmit={onFormSubmit}>
 
                 <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
-                <hr />
                 <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
                     label='Description' value={editForm.description} onChange={handleChanges} />
 
                 <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='URL' value={editForm.url} onChange={handleChanges} />
 
-                <input accept="image/png, image/jpeg, image/jpg"
-                    className={classes.input}  id="uploadImages" type="file"  name="imageFile"  onChange={handImageFileChange}
-                    key={imageFileKey || 'im'}       required
+                <input accept="image/png, image/jpeg, image/jpg" 
+                    className={classes.input} id="uploadImages" type="file" name="image" onChange={handleChanges}
+                    key={editForm.image || 'im'} required
                 />
                 <label htmlFor="uploadImages" className={classes.fullWidth}>
-                    <Button variant="contained" color="primary" component="span"
-                        startIcon={<ImageIcon />}>
-                        Upload a image
-                    </Button>
+                    <MuiThemeProvider theme={formError.image.length > 0 ? errorTheme : theme}>
+                        <Button component="span" startIcon={<ImageIcon />}>   Upload a image  </Button>
+                        {formError.image.length > 0 && <div> Image is required</div>}
+                    </MuiThemeProvider>
                 </label>
 
                 <div className={classes.divContainer}>
-                    <img src={imageFile}
-                        alt="img"
-                        className={`${classes.videoThumbnail} ${imageFile === undefined ? classes.hidden : 'show'}`}
-                    />
-                    {imageFile && (<Button variant="contained" color="primary" onClick={clearImage} className={classes.cancelBtn}>X</Button>)}
+                    <img src={editForm.image} alt="img" className={`${classes.videoThumbnail} ${editForm.image === '' ? classes.hidden : 'show'}`} />
+                    {editForm.image !== '' && (
+                        <MuiThemeProvider theme={errorTheme}>
+                            <Button onClick={() => clearInput('image')} className={classes.cancelBtn}>X</Button>
+                        </MuiThemeProvider>
+                    )}
                 </div>
+
+                <ValidateText name='physicalHeight'  type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight} 
+                label='Physical height of the image' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
+
+
+                <ValidateText name='physicalWidth'  type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth} 
+                label='Physical width of the image' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
+              
+
+                <input accept="video/mp4, video/m4v, video/mov"  className={classes.input}  type="file" name="video" id='uploadVideo'
+                    onChange={handleChanges}  key={editForm.video || 'vid'}  required />
+
+                <label htmlFor="uploadVideo" className={classes.fullWidth}>
+                <MuiThemeProvider theme={formError.video.length > 0 ? errorTheme : theme}>
+                    <Button component="span" startIcon={<VideoCallIcon />}>
+                        Upload a video
+                    </Button>
+                    {formError.video.length > 0 && <div> Video is required</div>}
+                </MuiThemeProvider>
+                </label>
+                <div className={classes.divContainer}>
+                    <div>{<p>Selected: {editForm.video.name}</p> && editForm.video.name}</div>
+                    <video controls id="videoPlayer"
+                        className={`${classes.videoThumbnail} ${editForm.video === '' ? classes.hidden : 'show'}`}
+                        src={editForm.video}>
+                    </video>
+                    {editForm.video !== '' && (
+                        <MuiThemeProvider theme={errorTheme}>
+                            <Button onClick={() => clearInput('video')} className={classes.cancelBtn}>X</Button>
+                        </MuiThemeProvider>
+                    )}
+                </div>
+
+                <ValidateText rows={3} multiline={true} name='sharingText' error={formError.sharingText.length > 0} errorMsg={formError.sharingText}
+                    label='Text to appear on sharing screens' value={editForm.sharingText} onChange={handleChanges} />
+
                 <br />
                 <div className={classes.fullWidth}>
-                    <br /><hr/>
-                    <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon />} >Submit</Button>
+                    <br /><hr />
+                    <Button type="submit" startIcon={<SaveIcon />} >Submit</Button>
                 </div>
             </form>
 
             <br />
-
-            <form autoComplete="off"
-                key={uploadStatus || 'form'}
-                method="POST"
-                encType="multipart/form-data"
-                onSubmit={onFormSubmit}
-                style={{ display: "none" }}
-            >
-
-                <TextField name="description" required label="Enter detailed description about your content."
-                    variant="outlined" className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    multiline={true}
-                    rows={2}
-                    rowsMax={5}
-                />
-                <TextField name="sharingText" required label="Text that can be shared by the users."
-                    variant="outlined" className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    multiline={true}
-                    rows={2}
-                    rowsMax={5}
-                />
-
-                <TextField name="physicalHeight" required label="Physical height of printed image in inches."
-                    variant="outlined" className={classes.fullWidth} fullWidth
-                    onChange={handleChange}
-                    type="number"
-                />
-
-                <input accept="video/mp4, video/m4v, video/mov"
-                    className={classes.input} id="uploadVideo"
-                    type="file" name="videoFile"
-                    onChange={handleVideoFileChange}
-                    key={videoFileKey || 'vid'}
-                    required
-                />
-                <label htmlFor="uploadVideo" className={classes.fullWidth}>
-                    <Button variant="contained" color="primary" component="span" startIcon={<VideoCallIcon />}>
-                        Upload a video
-                    </Button>
-                </label>
-
-                <div className={classes.divContainer}>
-                    <div>{<p>Selected: {videoFileName}</p> && videoFileName}</div>
-                    <video controls id="videoPlayer"
-                        className={`${classes.videoThumbnail} ${videoFile === undefined ? classes.hidden : 'show'}`}
-                        src={videoFile}>
-                    </video>
-                    {videoFile && (<Button variant="contained" color="primary" onClick={clearVideo} className={classes.cancelBtn}>X</Button>)}
-                </div>
-            </form>
         </div>
     );
 }
