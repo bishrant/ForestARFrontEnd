@@ -9,37 +9,37 @@ import Home from './Home';
 import Header from './header';
 import AddImageAnchor from './Add/AddImageAnchor';
 import AddNew from './AddNew.jsx';
-import Update from './Update/Update';
 import { MuiThemeProvider } from '@material-ui/core';
-import {theme} from './Add/theme';
-
+import { theme } from './Add/theme';
+import Login from './login/login';
 
 
 export default function App() {
   return (
     <MuiThemeProvider theme={theme}>
-    <Router>
-      <div>
-        <Header/>
-      </div>
-      <br />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route exact path="/addanchor">
-          <AddImageAnchor/>
-        </Route>
-        <Route path="/editanchor/:id" children={<AddImageAnchor/>} />
-         
-        <Route exact path="/addnew">
-          <AddNew/>
-        </Route>
+      <Router>
+        <div>
+          <Header />
+        </div>
+        <br />
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/addanchor">
+            <AddImageAnchor />
+          </Route>
+          <Route path="/editanchor/:id" children={<AddImageAnchor />} />
 
+          <Route exact path="/addnew">
+            <AddNew />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
 
-        <Route path="/update/:id" children={<Update />} />
-      </Switch>
-    </Router>
+        </Switch>
+      </Router>
     </MuiThemeProvider>
   )
 }

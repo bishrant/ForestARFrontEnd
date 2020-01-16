@@ -1,47 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import ImageCard from './ImageEntryCard';
+import { api } from './oauth';
 
 const ImageEntryComp = () => {
     const [images, setImages] = useState();
+    const [error, setError] = useState(false);
     useEffect(() => {
         getAllAnchors();
     }, []);
-    
+
     const getAllAnchors = () => {
-        axios.get('http://localhost:5000/getimages')
-        .then((d: any) => {
-            setImages(d.data['images']);
-        })
+        api.post('http://localhost:5000/getimages')
+            .then((d: any) => {
+                setImages(d.data['images']);
+            }).catch((e: any) => {
+                setError(e);
+            })
     }
 
     const del = (id: number) => {
-        const confirmed = window.confirm("Are you sure you want to delete "+ id);
+        const confirmed = window.confirm("Are you sure you want to delete " + id);
 
         if (confirmed) {
-        axios.get('http://localhost:5000/deleteAnchor/?id='+ id)
-        .then((d: any) => {
-            if (d.data.success) {
-                getAllAnchors();
-            } else {
-                console.error('Error deleting entry');
-            }
-        })
-    }
-
-    }
-
-    return images ? (
-        <div>
-            {images.map(
-                (img: any, i: number) => {
-                    return <ImageCard image={img} key={i} onDelete={() => {del(img.id)}}/>
+            api.post('http://localhost:5000/deleteAnchor/' + { id: id })
+                .then((d: any) => {
+                    if (d.data.success) {
+                        getAllAnchors();
+                    } else {
+                        console.error('Error deleting entry');
+                    }
                 })
-            }
-            
-        </div>
+        }
+    }
 
-    ) : (<div>loading</div>)
+    return error ?
+        (<div className={'error'}>
+            No entries found
+   </div>
+        ) : (
+            images ? (
+                <div>
+                    {images.map(
+                        (img: any, i: number) => {
+                            return <ImageCard image={img} key={i} onDelete={() => { del(img.id) }} />
+                        })
+                    }
+
+                </div>
+
+            ) : (<div>loading</div>)
+        )
 }
 
 export default ImageEntryComp

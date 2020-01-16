@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
   
-  export default function SignIn() {
+  export default function Login() {
     const classes = useStyles();
   
     return (
@@ -47,17 +47,7 @@ const useStyles = makeStyles(theme => ({
             Sign in
           </Typography>
           <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
+            <TextField variant="outlined"   margin="normal"   required   fullWidth   id="email"  label="Email Address"   name="email"  autoComplete="email"   autoFocus />
             <TextField
               variant="outlined"
               margin="normal"

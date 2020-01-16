@@ -10,9 +10,9 @@ const Header = () => {
                     ForestAR
                 </Typography>
                
-                <Link to="/" color="inherit"> <Button color="secondary">Home</Button></Link>
-                <Link to="/addanchor"> <Button color="secondary">Add Anchor</Button></Link>
-                <Link to="/addnew"> <Button color="secondary">Add New</Button></Link>
+                <Link to="/" color="inherit"> <Button >Home</Button></Link>
+                <Link to="/addanchor"> <Button >Add Anchor</Button></Link>
+                <Link to="/login"> <Button >Login</Button></Link>
 
             </Toolbar>
         </AppBar>
