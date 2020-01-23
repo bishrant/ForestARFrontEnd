@@ -20,5 +20,4 @@ api.interceptors.request.use(function(config: any) {
 }, (err:any) => {
     return Promise.reject(err);
 });
-console.log(api);
 export { api }

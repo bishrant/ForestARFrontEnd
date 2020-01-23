@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,6 +7,7 @@ import { CardMedia, CardActionArea, Button, MuiThemeProvider } from '@material-u
 import { useHistory } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { errorTheme } from './Add/theme';
+import ConfigContext from './ConfigContext'
 
 const useStyles = makeStyles({
   card: {
@@ -46,16 +47,19 @@ const goToUpdate = (history: any, id: any)  => {
 const ImageCard = (props: any) => {
   const history = useHistory();
   const classes = useStyles();
+  const config = useContext(ConfigContext);
+  console.log(config);
   return (
     <Card className={classes.card}  >
       <CardActionArea >
         <CardContent>
+          
           <Typography className={classes.title} color="textPrimary" gutterBottom>
             {props.image.title}
           </Typography>
           <CardMedia
             className={classes.media}
-            image={"http://localhost:5000/"+ props.image.folderName+"/" + props.image.imageName}
+            image={config.serverURL+ props.image.folderName+"/" + props.image.imageName}
             title={props.image.imageName}
           />
           <Typography variant="body2" component="p">

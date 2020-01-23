@@ -10,13 +10,9 @@ const ValidateText = (props) => {
   const isFullWidth = (Object.keys(split).length === 0) ? true : false;
 
   return <div className={isFullWidth ? 'coverDiv': 'splitDiv'} theme={theme}>
-    <TextField
-      variant="outlined"
-      onChange={props.onChange}
-      fullWidth
-      {...textFieldProps}
-      rowsMax={5}
-    />
+
+    
+    <TextField variant="outlined"  onChange={props.onChange} fullWidth  {...textFieldProps}  rowsMax={5} />
     <div className="errorMsg">
       {errorMsg &&
         errorMsg.map((c, k) => {
