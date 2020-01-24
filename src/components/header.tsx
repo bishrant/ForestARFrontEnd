@@ -1,11 +1,11 @@
 import React from 'react';
 import { AppBar, Toolbar, Button, Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import logo from '../assets/TFS_White.png';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect, useSelector } from 'react-redux';
-import {logout } from '../actions/userActions';
+import { logout } from '../actions/userActions';
 
 const headerStyle = makeStyles(theme => ({
     userHeader: {
@@ -17,11 +17,12 @@ const headerStyle = makeStyles(theme => ({
 }))
 const Header = (props: any) => {
     const style = headerStyle();
-    const user = useSelector((state:any) => state.user);
+    const history = useHistory();
+    const user = useSelector((state: any) => state.user);
     const isLoggedIn = () => {
-         return (typeof user.firstName !== 'undefined' && typeof user.token !== 'undefined')
+        return (typeof user.firstName !== 'undefined' && typeof user.token !== 'undefined')
     }
-    console.log(user);
+    // console.log(user);
     return (
         <AppBar position="static">
             <Toolbar>
@@ -48,7 +49,7 @@ const Header = (props: any) => {
                         </div>
                         }
                         {isLoggedIn() && <div className={style.userHeader}>Welcome {user.firstName}
-                            <Button onClick={props.logout} > Logout </Button>
+                            <Button onClick={() => { props.logout(); history.push("/login"); }} > Logout </Button>
                         </div>}
                     </Grid>
 
@@ -61,8 +62,8 @@ const Header = (props: any) => {
 
 const mapStateToProps = (state: any) => {
     return {
-      user: state.user
+        user: state.user
     }
-  }
+}
 
-export default connect(mapStateToProps, {logout})(Header);
+export default connect(mapStateToProps, { logout })(Header);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './shared/App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
@@ -13,16 +13,24 @@ import Register from './components/register';
 import { loadState } from './utils/StateLoader';
 import { logout, signinUser } from './actions/userActions';
 import { useDispatch } from 'react-redux';
+import { PrivateRoute } from './components/ProtectedRoute.jsx';
 
-export default function App() {
+
+
+
+export const App = (props: any) => {
   const dispatch = useDispatch();
   const verifyToken = async () => {
     if (loadState() !== null && typeof loadState() !== 'undefined' && typeof loadState().user !== "undefined") {
       if (typeof loadState().user.token === 'undefined') {
         return false;
       }
-      const token = loadState().user.token;
-      const data: any = JSON.stringify({ "token": token })
+      const _data = loadState().user;
+        const d = {"firstName": _data.firstName, "token": _data.token}
+        dispatch(signinUser(d))
+
+      // const token = loadState().user.token;
+      const data: any = JSON.stringify({ "token": _data.token })
       const isValid = await fetch("http://localhost:5000/verifyToken", {
         method: 'POST',
         body: data,
@@ -30,8 +38,12 @@ export default function App() {
           'Content-Type': 'application/json'
         }
       });
+      // @todo read the response body not just the overall code
+      console.log(isValid);
       if (!isValid) {
-        dispatch(logout())
+        console.log('invalid')
+        dispatch(logout());
+        
       } else {
         const data = loadState().user;
         const d = {"firstName": data.firstName, "token": data.token}
@@ -52,9 +64,9 @@ export default function App() {
             </div>
             <br />
             <Switch>
-              <Route exact path="/">
+              <PrivateRoute exact path="/">
                 <Home />
-              </Route>
+              </PrivateRoute>
               <Route exact path="/addanchor">
                 <AddImageAnchor />
               </Route>

@@ -12,9 +12,10 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { connect, useDispatch } from 'react-redux';
 import { signinUser } from '../actions/userActions';
-import {useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const Login = (props: any) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const classes = formStyles();
   const config = useContext(ConfigContext);
@@ -33,7 +34,8 @@ const Login = (props: any) => {
       }).then((s: any) => {
         setError('');
         closeSnackbar();
-        dispatch(signinUser(s.data))
+        dispatch(signinUser(s.data));
+        history.push("/")
       })
         .catch((e: any) => {
           enqueueSnackbar('Login failed. Invalid email and/or password.', {
@@ -54,7 +56,6 @@ const Login = (props: any) => {
     setForm({ ...form, [event.target.name]: email });
   }
 
-  const isLogged = useSelector((state:any) => state.login);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -75,7 +76,6 @@ const Login = (props: any) => {
           </Button>
         </ValidatorForm>
 
-
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2" >
@@ -89,8 +89,6 @@ const Login = (props: any) => {
           </Grid>
         </Grid>
       </div>
-      {isLogged ? "Logged in" : "Logged out"}
-
     </Container>
   );
 }

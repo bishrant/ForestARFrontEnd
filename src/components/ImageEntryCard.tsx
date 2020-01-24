@@ -48,7 +48,7 @@ const ImageCard = (props: any) => {
   const history = useHistory();
   const classes = useStyles();
   const config = useContext(ConfigContext);
-  console.log(config);
+  // console.log(config);
   return (
     <Card className={classes.card}  >
       <CardActionArea >
