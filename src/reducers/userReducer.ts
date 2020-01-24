@@ -1,16 +1,13 @@
-import {FETCH_USER, NEW_USER, SIGNIN_USER } from '../actions/types';
+import {SIGNIN_USER, SIGNOUT_USER } from '../actions/types';
 
 const initialState = {}
 
 export default function (state = initialState, action: any) {
     switch(action.type) {
-        case NEW_USER:
-            return action.payload
-        case FETCH_USER:
-            return {...state, user: action.payload}
         case SIGNIN_USER:
-            console.log(action.payload);
             return action.payload
+        case SIGNOUT_USER:
+            return {}
         default:
             return state;
     }
