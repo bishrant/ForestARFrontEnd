@@ -103,10 +103,10 @@ export default function Register() {
               <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth value={form.email}
                 validators={['required', 'isEmail']} errorMessages={['Email is required', 'Email is not valid']} />
 
-              <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined"
+              <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
                 fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} />
 
-              <TextValidator label="Confirm password" type="password" onChange={handleChange} name="password2" variant="outlined"
+              <TextValidator label="Confirm password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
                 fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
                 errorMessages={['Password is required', 'Password mismatch']} />
 
@@ -114,19 +114,19 @@ export default function Register() {
                 Sign In
               </Button>
             </ValidatorForm>
-          <Fragment>
-          <Grid container>
+            <Fragment>
+              <Grid container>
 
-            <Grid item>
-              <Link href="/login" variant="body2">
-                {"Already have an account? Sign In"}
-              </Link>
-            </Grid>
-          </Grid>
-        </Fragment>
-        </div>
+                <Grid item>
+                  <Link href="/login" variant="body2">
+                    {"Already have an account? Sign In"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </Fragment>
+          </div>
         }
-    
+
       </div>
     </Container>
   );

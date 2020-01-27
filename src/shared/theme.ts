@@ -1,6 +1,13 @@
 import { createMuiTheme } from "@material-ui/core";
 import { green,  red } from "@material-ui/core/colors";
 
+const top = {top : 120};
+// const right
+const center = {
+    left: '50%',
+    right: 'auto',
+    transform: 'translateX(-50%)',
+  };
 const theme = createMuiTheme({
     palette: {
         primary: green,
@@ -15,8 +22,27 @@ const theme = createMuiTheme({
                 '&:hover': {
                     backgroundColor: green[900]
                 }
+            },
+            label: {
+                color: 'white'
             }
-        }
+        },
+        MuiSnackbar: {
+            root: {
+                anchorOriginTopCenter :{
+                    ...top,...center
+                    
+                },
+                anchorOriginTopLeft: {
+                    ...top
+                }
+            }
+           
+        },
+        
+        MuiSnackbarContent: {
+            
+        } 
     }
 })
 
@@ -32,6 +58,9 @@ const errorTheme = createMuiTheme({
                 '&:hover': {
                     backgroundColor: red[900]
                 }
+            },
+            label: {
+                color: 'white'
             }
         }
     }
