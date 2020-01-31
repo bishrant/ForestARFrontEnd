@@ -1,21 +1,21 @@
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import ConfigContext from '../utils/ConfigContext';
 import { api } from '../utils/oauth';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { useHistory } from 'react-router-dom';
+import { IconButton } from '@material-ui/core';
+import { showSuccess, showErrors } from '../utils/Snackbars';
 
 export default function Register() {
   const classes = formStyles();
   const history = useHistory();
-  const config = useContext(ConfigContext);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [error, setError] = useState('');
   const [success, setsuccess] = useState(false);
@@ -33,44 +33,24 @@ export default function Register() {
   // customized
   const action = (key: any) => (
     <Fragment>
-      <Button onClick={() => {
-        closeSnackbar(key);
-        history.replace('/');
-      }}>
+      <IconButton color='inherit' size="small" onClick={() => { closeSnackbar(key); history.replace('/'); }}>
         OK
-      </Button>
+      </IconButton>
     </Fragment>
   );
 
   const registerUser = (e: any) => {
-
     e.preventDefault();
     if (form.email !== '' && form.password !== '') {
-      api.post(config.serverURL + 'signup', {
+      api.post('/signup', {
         ...form
       }).then((s: any) => {
         setError('');
         setsuccess(true);
-        enqueueSnackbar(`Please click on the activation link sent to your email ${form.email} to start using your account.`, {
-          variant: 'default', anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'center',
-          },
-
-          autoHideDuration: 5000,
-          onClose: (c: any) => {
-            history.replace('/');
-          },
-          action
-        });
+        showSuccess(enqueueSnackbar, `Please click on the activation link sent to your email ${form.email} to start using your account.`,  "/", history, action);
       })
         .catch((e: any) => {
-          enqueueSnackbar('Failed to create an account. Please try again.', {
-            variant: 'error', anchorOrigin: {
-              vertical: 'top',
-              horizontal: 'center',
-            }
-          });
+          showErrors(enqueueSnackbar, 'Failed to create an account. Please try again.', null )
           setError('Failed to create an account. Please try again. ');
         });
     } else {

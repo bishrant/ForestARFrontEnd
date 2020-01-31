@@ -47,8 +47,6 @@ const goToUpdate = (history: any, id: any)  => {
 const ImageCard = (props: any) => {
   const history = useHistory();
   const classes = useStyles();
-  const config = useContext(ConfigContext);
-  // console.log(config);
   return (
     <Card className={classes.card}  >
       <CardActionArea >
@@ -59,7 +57,7 @@ const ImageCard = (props: any) => {
           </Typography>
           <CardMedia
             className={classes.media}
-            image={config.serverURL+ props.image.folderName+"/" + props.image.imageName}
+            image={"/"+ props.image.folderName+"/" + props.image.imageName}
             title={props.image.imageName}
           />
           <Typography variant="body2" component="p">

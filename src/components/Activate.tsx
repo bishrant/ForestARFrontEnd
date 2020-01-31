@@ -1,66 +1,26 @@
-import React, { useContext, useEffect, Fragment } from 'react';
-import { withRouter } from 'react-router-dom';
-import ConfigContext from '../utils/ConfigContext';
+import React, { useEffect } from 'react';
+import { withRouter, useHistory } from 'react-router-dom';
 import Axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { Button, Container, CssBaseline } from '@material-ui/core';
+import { Container, CssBaseline } from '@material-ui/core';
 import formStyles from '../shared/formStyles';
+import { showSnackbar } from '../utils/Snackbars';
 
 const Activate = (props: any) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const config = useContext(ConfigContext);
     const token = props.match.params.token;
-
+    const history = useHistory();
     const activateToken = async (token: string) => {
-        // customized
-        const action = (key: any) => (
-            <Fragment>
-                <Button onClick={() => {
-                    closeSnackbar(key);
-                    window.location.replace('/')
-                }}>
-                    OK
-          </Button>
-            </Fragment>
-        );
-
-        Axios.post(config.serverURL+"activate", { token: token })
+        Axios.post("/activate", { token: token })
             .then((r) => {
-                console.log(r.data);
                 const success = r.data.success;
-                if (success) {
-                    enqueueSnackbar(`Successfully activated your account. Please login to continue`, {
-                        variant: 'default', anchorOrigin: {
-                            vertical: 'top',
-                            horizontal: 'center',
-                        },
-
-                        autoHideDuration: 50000,
-                        onClose: (c: any) => {
-                            window.location.replace('/login')
-                        },
-                        action
-                    });
-                } else {
-                    enqueueSnackbar(`Failed to actvate your account. Invalid or expired token`, {
-                        variant: 'error', anchorOrigin: {
-                            vertical: 'top',
-                            horizontal: 'center',
-                        },
-
-                        autoHideDuration: 50000,
-                        onClose: (c: any) => {
-                            window.location.replace('/')
-                        },
-                        action
-                    });
-                }
+                const msg = success ? 'Successfully activated your account. Please login to continue' : 'Failed to actvate your account. Invalid or expired token';
+                showSnackbar(success, enqueueSnackbar, closeSnackbar, msg, '/login', history)
             })
             .catch((e) => {
-                console.log(e)
+                showSnackbar(false, enqueueSnackbar, closeSnackbar, "Error. Please try again.", '/login', history)
             })
     }
-
 
     useEffect(() => {
         activateToken(token)
@@ -72,7 +32,6 @@ const Activate = (props: any) => {
     const classes = formStyles();
     return (<Container component="main" maxWidth="xs">
         <CssBaseline />
-
         <div className={classes.paper}>
         </div>
     </Container>)

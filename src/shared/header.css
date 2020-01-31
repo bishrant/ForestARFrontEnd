@@ -1,0 +1,12 @@
+
+@media screen and (max-width: 600px) {
+    #logoimgLg {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    #logoimgSm {
+        display: none;
+    }
+}

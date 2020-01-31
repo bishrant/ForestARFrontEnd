@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,6 @@ import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { useHistory, withRouter } from 'react-router-dom';
-import Axios from 'axios';
 import { showSnackbar } from '../utils/Snackbars';
 
 const ResetPassword = (props: any) => {
@@ -17,7 +16,9 @@ const ResetPassword = (props: any) => {
     const token = props.match.params.token;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [error, setError] = useState('');
+    const [success, setsuccess] = useState(false);
     const [form, setForm] = useState({
+        oldpassword: '',
         password: '',
         password2: '',
         token: token
@@ -26,20 +27,25 @@ const ResetPassword = (props: any) => {
     ValidatorForm.addValidationRule('isPasswordMatch', (value: any) => {
         return value === form.password;
     })
+    // customized
 
     const changePassword = (e: any) => {
+
         e.preventDefault();
-        if (form.password !== '' && form.password2 !== '') {
-            api.post('/resetpassword', {
+        if (form.oldpassword !== '' && form.password !== '' && form.password2 !== '')  {
+            api.post('/changepassword', {
                 ...form
             }).then((s: any) => {
-                const success = s.data.success;
-                const msg = success ? 'Successfully changed password, Please login to continue' : 'Failed to reset password'
-                showSnackbar(success, enqueueSnackbar, closeSnackbar, msg, '/login', history)
+                if (s.data.success) {
+                    setError('');
+                    setsuccess(true);
+                    showSnackbar(true, enqueueSnackbar, closeSnackbar, 'Successfully changed password. Please login to continue.', '/login', history);
+                } else {
+                    throw new Error('Failed to change password')
+                }
             }).catch((e: any) => {
-                const msg = 'Failed to reset password';
-                showSnackbar(false, enqueueSnackbar, closeSnackbar, msg, '/login', history)
-                setError('No user account found for the provided email address. Please try again.');
+                showSnackbar(false, enqueueSnackbar, closeSnackbar, 'Failed to change password.', null, history);
+                setError('Failed to change password. Please try again.');
             });
         } else {
             return;
@@ -51,37 +57,30 @@ const ResetPassword = (props: any) => {
         setForm({ ...form, [event.target.name]: val });
     }
 
-    useEffect(() => {
-        (async function anyFunctionName() {
-            Axios.post("/verifyEmailToken", { token: token, type: 'resetpassword' })
-                .then((r) => {
-                    if (!r.data.success) {
-                        showSnackbar(false, enqueueSnackbar, closeSnackbar, "Invalid or expired token.", '/login', history)
-                    }
-                })
-        })();
-
-    }, [])
-
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
+
             <div className={classes.paper}>
-                <Typography component="h1" variant="h5"> Please enter your new password </Typography>
+                <Typography component="h1" variant="h5"> Change password </Typography>
+
                 {error !== '' && <div className={`${classes.fullWidth} ${classes.error}`}>{error}</div>}
-                {error === '' &&
+                {success === false &&
                     <div>
-                        Please enter the email address associated with your account <br></br>
                         <ValidatorForm className={classes.form} onSubmit={changePassword} onError={errors => console.log(errors)}>
 
-                            <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
-                                fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} />
+                        <TextValidator label="Old Password" type="password" onChange={handleChange} name="oldpassword" variant="outlined" autoComplete="off"
+                                fullWidth value={form.oldpassword} validators={['required']} errorMessages={['Old Password is required']} />
 
-                            <TextValidator label="Confirm password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
+                            <TextValidator label="New Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
+                                fullWidth value={form.password} validators={['required']} errorMessages={['New password is required']} />
+
+                            <TextValidator label="Confirm new password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
                                 fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
                                 errorMessages={['Password is required', 'Password mismatch']} />
+
                             <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
-                                Reset Password
+                                Change Password
                             </Button>
                         </ValidatorForm>
                         <Fragment>

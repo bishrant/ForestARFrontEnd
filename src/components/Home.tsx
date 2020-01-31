@@ -1,19 +1,44 @@
 import React from 'react';
-import { Typography, Container, CssBaseline, Button } from '@material-ui/core';
+import { Typography, Container, CssBaseline, makeStyles, Theme, createStyles } from '@material-ui/core';
 import ImageEntryComp from './ImageEntry';
-import { showErrors } from '../utils/Snackbars';
-import { useSnackbar } from 'notistack';
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        backgroundColor: theme.palette.background.paper,
+        width: 500,
+        position: "relative",
+        minHeight: 200
+      },
+      fab: {
+        position: "fixed",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+        color: 'white'
+      },
+    })
+  );
+
+  const classes = useStyles();
+  const history = useHistory();
+
+  const addAnchor = () => history.push('/addanchor')
   return (<div>
-    <Button onClick={() => {showErrors(enqueueSnackbar, 'sdf')}}>Click</Button>
     <React.Fragment>
+      <Fab color="primary" aria-label="add" className={classes.fab} onClick={addAnchor}>
+        <AddIcon />
+
+      </Fab>
       <CssBaseline />
       <Container maxWidth="sm">
         <ImageEntryComp />
         <Typography component="div" style={{ height: '100vh' }} />
+
+
       </Container>
     </React.Fragment>
 

@@ -1,11 +1,16 @@
 import React from 'react';
 import { AppBar, Toolbar, Button, Grid } from '@material-ui/core';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Link, useHistory } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import logo from '../assets/TFS_White.png';
+import logoStar from '../assets/logostar.png';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect, useSelector } from 'react-redux';
 import { logout } from '../actions/userActions';
+import "../shared/header.css";
 
 const headerStyle = makeStyles(theme => ({
     userHeader: {
@@ -20,9 +25,23 @@ const Header = (props: any) => {
     const history = useHistory();
     const user = useSelector((state: any) => state.user);
     const isLoggedIn = () => {
+        if (user === null) {
+            return false;
+        } else {
         return (typeof user.firstName !== 'undefined' && typeof user.token !== 'undefined')
+        }
     }
-    // console.log(user);
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <AppBar position="static">
             <Toolbar>
@@ -36,9 +55,12 @@ const Header = (props: any) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Link to="https://tfsweb.tamu.edu"> <img src={logo} height="30" alt="tfs logo" /></Link>
+                            <Link to="https://tfsweb.tamu.edu"> 
+                            <img height="30" alt="tfs logo" id='logoimgLg' src={logo} />
+                            <img height="30" alt="tfs logo" id='logoimgSm' src={logoStar} />
+                            </Link>
                             <Link to="/" style={{ textDecoration: 'none' }}> <Button >Forest AR</Button></Link>
-                            <Link to="/addanchor" style={{ textDecoration: 'none' }}> <Button >Add Anchor</Button></Link>
+                            
                         </div>
                     </Grid>
 
@@ -48,8 +70,34 @@ const Header = (props: any) => {
                             <Link to="/register" style={{ textDecoration: 'none' }}> <Button > Register </Button> </Link>
                         </div>
                         }
-                        {isLoggedIn() && <div className={style.userHeader}>Welcome {user.firstName}
-                            <Button onClick={() => { props.logout(); history.push("/login"); }} > Logout </Button>
+                        {isLoggedIn() && <div className={style.userHeader}>
+                            
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            Welcome&nbsp;&nbsp;<AccountCircleIcon></AccountCircleIcon> &nbsp;  {user.firstName} <KeyboardArrowDownIcon/>
+                            </Button>
+                            <Menu
+                                id="simple-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                                
+                            >
+                               
+                                <MenuItem onClick={() => {
+                                    handleClose();
+                                    props.logout(); 
+                                    history.push("/login");
+                                    }}>Logout</MenuItem>
+                                     <MenuItem style={{width: '150px'}}
+                                onClick={() => {
+                                    handleClose();
+                                    history.push("/changepassword")  
+                                }}>
+                                    
+                                    Change Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</MenuItem>
+                               
+                            </Menu>
                         </div>}
                     </Grid>
 

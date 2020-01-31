@@ -14,7 +14,6 @@ import { populateEditForm, formValidators, validateFormOnSubmit } from '../utils
 
 export default function AddImageAnchor() {
     let { id } = useParams();
-    const serverUrl = 'http://localhost:5000/';
     const classes = useStyles();
     const [uploadStatus, setUploadStatus] = useState();
     const [fileNames, setFileNames] = useState<any>({
@@ -24,7 +23,7 @@ export default function AddImageAnchor() {
         videoLink: ''
     });
     const populateForm = (data: any) => {
-        const _f = populateEditForm(data, editForm, serverUrl);
+        const _f = populateEditForm(data, editForm);
         setEditForm(_f);
         setFileNames({
             ...fileNames,
@@ -35,7 +34,7 @@ export default function AddImageAnchor() {
 
     useEffect(() => {
         if (typeof id !== 'undefined' && id !== null) {
-            api.post(serverUrl + 'getAnchorDetails/', { id: id })
+            api.post('/getAnchorDetails/', { id: id })
                 .then((d: any) => {
                     populateForm(d.data[0])
                 })
@@ -53,7 +52,6 @@ export default function AddImageAnchor() {
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
         if (isValid) return;
-        const serverUrl = "http://localhost:5000/addAnchor";
         const formData = new FormData();
         const d = { ...editForm };
         Object.keys(d).map((keyName, i) => {
@@ -69,7 +67,7 @@ export default function AddImageAnchor() {
         })
         const config = { headers: { 'content-type': 'multipart/form-data' } }
 
-        api.post(serverUrl, formData, config)
+        api.post("/addAnchor", formData, config)
             .then((s: any) => {
                 setUploadStatus("successfully updated");
             })
@@ -139,7 +137,8 @@ export default function AddImageAnchor() {
         isInvalid ?
             <Redirect to="/" /> :
             <div className={classes.container} key={'container'}>
-                <div>{uploadStatus}</div>
+                {uploadStatus && <div>{uploadStatus}</div>}
+                <span>Please enter details for a new image anchor </span><br/>
                 <form noValidate onSubmit={onFormSubmit} method="POST" encType="multipart/form-data"  >
 
                     <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
@@ -169,11 +168,11 @@ export default function AddImageAnchor() {
                     </div>
 
                     <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight}
-                        label='Physical height of the image' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
+                        label='Print height (in)' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
 
 
                     <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth}
-                        label='Physical width of the image' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
+                        label='Print width (in)' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
 
 
                     <input accept="video/mp4, video/m4v, video/mov" className={classes.input} type="file" name="videoLink" id='uploadVideo'

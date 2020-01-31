@@ -1,6 +1,6 @@
 
 
-const populateEditForm = (data: any, editForm: any, serverUrl: any) => {
+const populateEditForm = (data: any, editForm: any) => {
     let _f:any = {...editForm};
     _f.title = data.title;
     _f.id = data.id;
@@ -10,8 +10,8 @@ const populateEditForm = (data: any, editForm: any, serverUrl: any) => {
     _f.physicalHeight = data.physicalHeight;
     _f.sharingText = data.sharingText;
     _f.folderName = data.folderName;
-    _f.imageName =serverUrl + data.folderName+"/"+ data.imageName;
-    _f.videoLink = serverUrl + data.folderName+"/"+ data.videoLink;
+    _f.imageName ='/' + data.folderName+"/"+ data.imageName;
+    _f.videoLink = '/' + data.folderName+"/"+ data.videoLink;
     return _f;
 }
 

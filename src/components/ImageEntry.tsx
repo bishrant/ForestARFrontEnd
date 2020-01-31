@@ -10,7 +10,7 @@ const ImageEntryComp = () => {
     }, []);
 
     const getAllAnchors = () => {
-        api.post('http://localhost:5000/getimages')
+        api.post('/getimages')
             .then((d: any) => {
                 setImages(d.data['images']);
             }).catch((e: any) => {
@@ -22,7 +22,7 @@ const ImageEntryComp = () => {
         const confirmed = window.confirm("Are you sure you want to delete " + id);
 
         if (confirmed) {
-            api.post('http://localhost:5000/deleteAnchor/' + { id: id })
+            api.post('/deleteAnchor/' + { id: id })
                 .then((d: any) => {
                     if (d.data.success) {
                         getAllAnchors();

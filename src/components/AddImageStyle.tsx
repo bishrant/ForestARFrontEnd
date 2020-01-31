@@ -3,10 +3,13 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
+            width: '90%',
+            /* height: 100vh; */
+            /* margin: auto; */
+            maxWidth: '650px',
+            /* text-align: center; */
+            padding: '10px',
             margin: 'auto',
-            height: '100vh',
-            width: '50%',
-            textAlign: 'center'
         },
         fullWidth: {
             width: '100%',
@@ -31,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: 'auto',
         },
         cancelBtn: {
-            position: 'absolute', 
-            zIndex: 10, 
+            position: 'absolute',
+            zIndex: 10,
             top: 0,
             right: 0
         }

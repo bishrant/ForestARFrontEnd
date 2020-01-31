@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import ConfigContext from '../utils/ConfigContext';
 import { api } from '../utils/oauth';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -13,12 +12,12 @@ import formStyles from '../shared/formStyles';
 import { connect, useDispatch } from 'react-redux';
 import { signinUser } from '../actions/userActions';
 import { useHistory } from 'react-router-dom';
+import { showErrors } from '../utils/Snackbars';
 
 const Login = (props: any) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = formStyles();
-  const config = useContext(ConfigContext);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [error, setError] = useState('');
   const [form, setForm] = useState({
@@ -29,7 +28,7 @@ const Login = (props: any) => {
   const loginUser = (e: any) => {
     e.preventDefault();
     if (form.email !== '' && form.password !== '') {
-      api.post(config.serverURL + 'login', {
+      api.post('/login', {
         ...form
       }).then((s: any) => {
         setError('');
@@ -38,12 +37,8 @@ const Login = (props: any) => {
         history.push("/")
       })
         .catch((e: any) => {
-          enqueueSnackbar('Login failed. Invalid email and/or password.', {
-            variant: 'error', anchorOrigin: {
-              vertical: 'top',
-              horizontal: 'center',
-            }
-          });
+          console.log(e);
+          showErrors(enqueueSnackbar, 'Login failed. Invalid email and/or password.', null)
           setError('Login failed. Invalid email and/or password.');
         });
     } else {
@@ -72,7 +67,7 @@ const Login = (props: any) => {
             validators={['required']} errorMessages={['Password is required']} />
 
           <Button fullWidth variant="contained" color="primary"
-            type="submit" className={classes.submit} > Sign In 
+            type="submit" className={classes.submit} > Sign In
           </Button>
         </ValidatorForm>
 
