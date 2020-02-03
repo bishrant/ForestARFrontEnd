@@ -55,10 +55,10 @@ const Header = (props: any) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Link to="https://tfsweb.tamu.edu"> 
+                            <a href="https://tfsweb.tamu.edu" target="_blank" rel="noopener noreferrer"> 
                             <img height="30" alt="tfs logo" id='logoimgLg' src={logo} />
                             <img height="30" alt="tfs logo" id='logoimgSm' src={logoStar} />
-                            </Link>
+                            </a>
                             <Link to="/" style={{ textDecoration: 'none' }}> <Button >Forest AR</Button></Link>
                             
                         </div>
@@ -75,14 +75,7 @@ const Header = (props: any) => {
                             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                             Welcome&nbsp;&nbsp;<AccountCircleIcon></AccountCircleIcon> &nbsp;  {user.firstName} <KeyboardArrowDownIcon/>
                             </Button>
-                            <Menu
-                                id="simple-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                                
-                            >
+                            <Menu id="simple-menu"  anchorEl={anchorEl}  keepMounted open={Boolean(anchorEl)} onClose={handleClose} >
                                
                                 <MenuItem onClick={() => {
                                     handleClose();

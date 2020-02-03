@@ -1,17 +1,6 @@
 import axios from 'axios';
 import { loadState } from './StateLoader';
 
-
-// axios.interceptors.request.use((config: any) => {
-//     const token = 'test token';
-//     if (token !== null) {
-//         config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-// }, (err: any) => {
-//     return Promise.reject(err);
-// })
-
 const api = axios.create();
 api.interceptors.request.use(function (config: any) {
     const user = loadState().user;
@@ -27,4 +16,5 @@ api.interceptors.request.use(function (config: any) {
 }, (err: any) => {
     return Promise.reject(err);
 });
+
 export { api }

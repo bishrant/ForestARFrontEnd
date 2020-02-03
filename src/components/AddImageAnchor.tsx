@@ -11,11 +11,16 @@ import { MuiThemeProvider } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { api } from '../utils/oauth';
 import { populateEditForm, formValidators, validateFormOnSubmit } from '../utils/FormUtils';
+import { useHistory } from 'react-router-dom';
+import { showSnackbar } from '../utils/Snackbars';
+import { useSnackbar } from 'notistack';
 
 export default function AddImageAnchor() {
     let { id } = useParams();
     const classes = useStyles();
     const [uploadStatus, setUploadStatus] = useState();
+    const history = useHistory();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [fileNames, setFileNames] = useState<any>({
         imageName: '',
         imageNameBlob: null,
@@ -49,6 +54,7 @@ export default function AddImageAnchor() {
 
     const onFormSubmit = async (event: any) => {
         event.preventDefault();
+        console.log(id);
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
         if (isValid) return;
@@ -69,9 +75,12 @@ export default function AddImageAnchor() {
 
         api.post("/addAnchor", formData, config)
             .then((s: any) => {
+                const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
+                showSnackbar(true, enqueueSnackbar, closeSnackbar, msg, '/home', history);
                 setUploadStatus("successfully updated");
             })
             .catch((e: any) => {
+                showSnackbar(false, enqueueSnackbar, closeSnackbar, "Error uploading. Please try again.", null, history);
                 setUploadStatus("error uploading")
             })
     }
@@ -113,6 +122,8 @@ export default function AddImageAnchor() {
         const _name = e.target.name;
         if (e.target.name === 'imageName' || e.target.name === 'videoLink') {
             const _file = e.target.files[0];
+            const size = e.target.files[0].size;
+            console.log("File size ", size)
             setEditForm({
                 ...editForm,
                 [_name]: URL.createObjectURL(_file)
@@ -138,7 +149,7 @@ export default function AddImageAnchor() {
             <Redirect to="/" /> :
             <div className={classes.container} key={'container'}>
                 {uploadStatus && <div>{uploadStatus}</div>}
-                <span>Please enter details for a new image anchor </span><br/>
+                <span>Please enter details for a new image anchor </span><br />
                 <form noValidate onSubmit={onFormSubmit} method="POST" encType="multipart/form-data"  >
 
                     <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />

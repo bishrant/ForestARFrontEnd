@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, withRouter, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Header from './components/header';
@@ -17,7 +17,6 @@ import Activate from './components/Activate';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import ChangePassword from './components/ChangePassword';
-import {useHistory } from 'react-router-dom'
 
 const App = (props: any) => {
   const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const App = (props: any) => {
       const userLocalStorage = loadState().user;
       if (userLocalStorage === null || typeof userLocalStorage === 'undefined') {
         return false;
-      } 
+      }
       if (typeof userLocalStorage.token === 'undefined') {
         return false;
       }
@@ -36,43 +35,33 @@ const App = (props: any) => {
       dispatch(signinUser(d))
 
       const data: any = JSON.stringify({ "token": _data.token })
-      const isValid = await fetch("/verifyToken", {
+      fetch("/verifyToken", {
         method: 'POST',
         body: data,
         headers: {
           'Content-Type': 'application/json'
         }
-      });
-      if (!isValid) {
-        console.log('invalid')
-        dispatch(logout());
-      } else {
-        const data = localData.user;
-        const d = { "firstName": data.firstName, "token": data.token }
-        dispatch(signinUser(d))
-      }
+      }).then((a: any) => {
+        a.json().then((d: any) => {
+          if (d.valid) {
+            const data = localData.user;
+            const d = { "firstName": data.firstName, "token": data.token }
+            dispatch(signinUser(d))
+          } else {
+            dispatch(logout());
+          }
 
+        })
+      }).catch((error: any) => {
+        console.log(error);
+        dispatch(logout());
+      })
     }
   }
   verifyToken();
 
-  const [currentPath, setCurrentPath] = useState(props.location.pathname);
 
-  const lg = async () => {
-    dispatch(logout())
-  }
-
-  useEffect(() => {
-    const { pathname } = props.location;
-    console.log("New path:", pathname);
-    if (pathname === '/login') {
-      console.log(pathname);
-      lg();
-    }
-    setCurrentPath(pathname);
-  }, [props.location.pathname]);
-
-  const notistackRef:any = React.createRef();
+  const notistackRef: any = React.createRef();
 
   const CustomSnackBar = (props: any) => {
     const { children, ...others } = props;
@@ -116,9 +105,9 @@ const App = (props: any) => {
               <Route exact path="/activate/:token">
                 <Activate />
               </Route>
-              <Route exact path="/changepassword">
+              <PrivateRoute exact path="/changepassword">
                 <ChangePassword />
-              </Route>
+              </PrivateRoute>
             </Switch>
           </Router>
         </CustomSnackBar>

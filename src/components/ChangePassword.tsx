@@ -9,10 +9,13 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { useHistory, withRouter } from 'react-router-dom';
 import { showSnackbar } from '../utils/Snackbars';
+import { useDispatch } from 'react-redux';
+import { logout } from '../actions/userActions';
 
 const ResetPassword = (props: any) => {
     const classes = formStyles();
     const history = useHistory();
+    const dispatch = useDispatch();
     const token = props.match.params.token;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [error, setError] = useState('');
@@ -32,7 +35,7 @@ const ResetPassword = (props: any) => {
     const changePassword = (e: any) => {
 
         e.preventDefault();
-        if (form.oldpassword !== '' && form.password !== '' && form.password2 !== '')  {
+        if (form.oldpassword !== '' && form.password !== '' && form.password2 !== '') {
             api.post('/changepassword', {
                 ...form
             }).then((s: any) => {
@@ -40,6 +43,7 @@ const ResetPassword = (props: any) => {
                     setError('');
                     setsuccess(true);
                     showSnackbar(true, enqueueSnackbar, closeSnackbar, 'Successfully changed password. Please login to continue.', '/login', history);
+                    dispatch(logout())
                 } else {
                     throw new Error('Failed to change password')
                 }
@@ -57,6 +61,7 @@ const ResetPassword = (props: any) => {
         setForm({ ...form, [event.target.name]: val });
     }
 
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -69,7 +74,7 @@ const ResetPassword = (props: any) => {
                     <div>
                         <ValidatorForm className={classes.form} onSubmit={changePassword} onError={errors => console.log(errors)}>
 
-                        <TextValidator label="Old Password" type="password" onChange={handleChange} name="oldpassword" variant="outlined" autoComplete="off"
+                            <TextValidator label="Old Password" type="password" onChange={handleChange} name="oldpassword" variant="outlined" autoComplete="off"
                                 fullWidth value={form.oldpassword} validators={['required']} errorMessages={['Old Password is required']} />
 
                             <TextValidator label="New Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
@@ -82,6 +87,7 @@ const ResetPassword = (props: any) => {
                             <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
                                 Change Password
                             </Button>
+
                         </ValidatorForm>
                         <Fragment>
 

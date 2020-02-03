@@ -11,4 +11,3 @@ export const signinUser = (user: any) => {
         payload: user
     }
 }
-// const signinUser = (user: any) => 
