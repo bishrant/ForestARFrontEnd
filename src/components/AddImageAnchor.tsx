@@ -29,7 +29,9 @@ export default function AddImageAnchor() {
     });
     const populateForm = (data: any) => {
         const _f = populateEditForm(data, editForm);
+        console.log(_f);
         setEditForm(_f);
+        console.log(editForm)
         setFileNames({
             ...fileNames,
             imageName: data.imageName,
@@ -72,7 +74,7 @@ export default function AddImageAnchor() {
             return null;
         })
         const config = { headers: { 'content-type': 'multipart/form-data' } }
-
+        console.log(d)
         api.post("/addAnchor", formData, config)
             .then((s: any) => {
                 const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
@@ -120,10 +122,8 @@ export default function AddImageAnchor() {
 
     const handleChanges = (e: any) => {
         const _name = e.target.name;
-        if (e.target.name === 'imageName' || e.target.name === 'videoLink') {
+        if (_name === 'imageName' || _name === 'videoLink') {
             const _file = e.target.files[0];
-            const size = e.target.files[0].size;
-            console.log("File size ", size)
             setEditForm({
                 ...editForm,
                 [_name]: URL.createObjectURL(_file)
@@ -133,7 +133,7 @@ export default function AddImageAnchor() {
                 [_name]: _file.name,
                 [_name + 'blob']: _file
             })
-            checkForError(e.target.name, e.target.files[0]);
+            checkForError(_name, e.target.files[0]);
         } else {
             setEditForm({
                 ...editForm,

@@ -25,7 +25,7 @@ const length10 = (val: any) => val.length > 10;
 
 
 const formValidators: any = {
-    title: { validator: [requiredValidator, length10], messages: ["Title is required", "Length should be at least 10 characters"] },
+    title: { validator: [requiredValidator], messages: ["Title is required"] },
     description: { validator: [requiredValidator], messages: ["Description is required"] },
     url: { validator: [requiredValidator], messages: ["URL is required"] },
     imageName: { validator: [requiredValidator], messages: ["Image is required"] },

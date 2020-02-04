@@ -10,19 +10,19 @@ const ImageEntryComp = () => {
     }, []);
 
     const getAllAnchors = () => {
-        api.post('/getimages')
+        api.post('/getAnchorImagesByUser')
             .then((d: any) => {
-                setImages(d.data['images']);
+                setImages(d.data);
             }).catch((e: any) => {
                 setError(e);
             })
     }
 
     const del = (id: number) => {
-        const confirmed = window.confirm("Are you sure you want to delete " + id);
+        const confirmed = window.confirm("Are you sure you want to delete this entry. This can't be undone.");
 
         if (confirmed) {
-            api.post('/deleteAnchor/' + { id: id })
+            api.post('/deleteAnchor' , { id: id })
                 .then((d: any) => {
                     if (d.data.success) {
                         getAllAnchors();

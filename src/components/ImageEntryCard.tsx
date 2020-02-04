@@ -14,7 +14,8 @@ const useStyles = makeStyles({
     minWidth: 275,
     display: "flex",
     justifyContent: 'space-around',
-    padding: '10px'
+    padding: '10px',
+    marginTop: '10px'
   },
   bullet: {
     display: 'inline-block',
@@ -22,7 +23,8 @@ const useStyles = makeStyles({
     transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: 'bold'
   },
   pos: {
     marginBottom: 12,

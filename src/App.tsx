@@ -86,6 +86,9 @@ const App = (props: any) => {
               <PrivateRoute exact path="/">
                 <Home />
               </PrivateRoute>
+              <PrivateRoute exact path="/home">
+                <Home />
+              </PrivateRoute>
               <Route exact path="/addanchor">
                 <AddImageAnchor />
               </Route>

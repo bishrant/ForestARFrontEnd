@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Container, CssBaseline, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { Container, CssBaseline, makeStyles, Theme, createStyles } from '@material-ui/core';
 import ImageEntryComp from './ImageEntry';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -31,17 +31,12 @@ const Home = () => {
     <React.Fragment>
       <Fab color="primary" aria-label="add" className={classes.fab} onClick={addAnchor}>
         <AddIcon />
-
       </Fab>
       <CssBaseline />
       <Container maxWidth="sm">
         <ImageEntryComp />
-        <Typography component="div" style={{ height: '100vh' }} />
-
-
       </Container>
     </React.Fragment>
-
   </div>
   )
 }
