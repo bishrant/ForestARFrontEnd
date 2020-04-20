@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,7 +7,7 @@ import { CardMedia, CardActionArea, Button, MuiThemeProvider } from '@material-u
 import { useHistory } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { errorTheme } from '../shared/theme';
-import ConfigContext from '../utils/ConfigContext'
+import { apiPath } from '../utils/config';
 
 const useStyles = makeStyles({
   card: {
@@ -35,16 +35,15 @@ const useStyles = makeStyles({
     backgroundSize: 'contain'
   },
   deleteBtn: {
-      maxHeight: '100px',
-      margin: 'auto',
-      width: '100%',
+    maxHeight: '100px',
+    margin: 'auto',
+    width: '100%',
   }
 });
 
-const goToUpdate = (history: any, id: any)  => {
-  history.push("/editanchor/"+ id);
+const goToUpdate = (history: any, id: any) => {
+  history.push("/editanchor/" + id);
 }
-
 
 const ImageCard = (props: any) => {
   const history = useHistory();
@@ -53,13 +52,13 @@ const ImageCard = (props: any) => {
     <Card className={classes.card}  >
       <CardActionArea >
         <CardContent>
-          
+
           <Typography className={classes.title} color="textPrimary" gutterBottom>
             {props.image.title}
           </Typography>
           <CardMedia
             className={classes.media}
-            image={"/"+ props.image.folderName+"/" + props.image.imageName}
+            image={apiPath + "public/" + props.image.folderName + "/" + props.image.imageName}
             title={props.image.imageName}
           />
           <Typography variant="body2" component="p">
@@ -69,14 +68,14 @@ const ImageCard = (props: any) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <div style={{margin: 'auto'}}>
-      <Button  className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { goToUpdate(history, props.image.id)}} >
-      Edit</Button><br/><br/>
-      <MuiThemeProvider theme={errorTheme}>
-        <Button  className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => {props.onDelete(props.image.id)}} >
-      Delete</Button>
-    </MuiThemeProvider>      
-    </div>
+      <div style={{ margin: 'auto' }}>
+        <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
+          Edit</Button><br /><br />
+        <MuiThemeProvider theme={errorTheme}>
+          <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { props.onDelete(props.image.id) }} >
+            Delete</Button>
+        </MuiThemeProvider>
+      </div>
     </Card>
   );
 }

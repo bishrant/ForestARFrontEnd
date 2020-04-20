@@ -15,7 +15,6 @@ import { createBrowserHistory } from "history";
 const history = createBrowserHistory();
 
 store.subscribe(() => {
-    console.log(store.getState());
     saveState(store.getState());
 })
 ReactDOM.render(<Provider store={store}>

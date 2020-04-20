@@ -10,6 +10,7 @@ import formStyles from '../shared/formStyles';
 import { useHistory, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import { showSnackbar } from '../utils/Snackbars';
+import { apiPath } from '../utils/config';
 
 const ResetPassword = (props: any) => {
     const classes = formStyles();
@@ -30,7 +31,7 @@ const ResetPassword = (props: any) => {
     const changePassword = (e: any) => {
         e.preventDefault();
         if (form.password !== '' && form.password2 !== '') {
-            api.post('/resetpassword', {
+            api.post(apiPath +'resetpassword', {
                 ...form
             }).then((s: any) => {
                 const success = s.data.success;

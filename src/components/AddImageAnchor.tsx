@@ -13,7 +13,12 @@ import { api } from '../utils/oauth';
 import { populateEditForm, formValidators, validateFormOnSubmit } from '../utils/FormUtils';
 import { useHistory } from 'react-router-dom';
 import { showSnackbar } from '../utils/Snackbars';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSnackbar } from 'notistack';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { IconButton } from '@material-ui/core';
+import { apiPath } from '../utils/config';
 
 export default function AddImageAnchor() {
     let { id } = useParams();
@@ -28,7 +33,7 @@ export default function AddImageAnchor() {
         videoLink: ''
     });
     const populateForm = (data: any) => {
-        const _f = populateEditForm(data, editForm);
+        const _f = populateEditForm(data, editForm, process.env.REACT_APP_ROOT + 'public/');
         console.log(_f);
         setEditForm(_f);
         console.log(editForm)
@@ -41,7 +46,7 @@ export default function AddImageAnchor() {
 
     useEffect(() => {
         if (typeof id !== 'undefined' && id !== null) {
-            api.post('/getAnchorDetails/', { id: id })
+            api.post(apiPath + 'getAnchorDetails/', { id: id })
                 .then((d: any) => {
                     populateForm(d.data[0])
                 })
@@ -56,6 +61,7 @@ export default function AddImageAnchor() {
 
     const onFormSubmit = async (event: any) => {
         event.preventDefault();
+        setShowbackDrop(true);
         console.log(id);
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
@@ -75,15 +81,17 @@ export default function AddImageAnchor() {
         })
         const config = { headers: { 'content-type': 'multipart/form-data' } }
         console.log(d)
-        api.post("/addAnchor", formData, config)
+        api.post(apiPath+ "addAnchor", formData, config)
             .then((s: any) => {
                 const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
                 showSnackbar(true, enqueueSnackbar, closeSnackbar, msg, '/home', history);
-                setUploadStatus("successfully updated");
+                setUploadStatus('successfully updated');
+                setShowbackDrop(false);
             })
             .catch((e: any) => {
                 showSnackbar(false, enqueueSnackbar, closeSnackbar, "Error uploading. Please try again.", null, history);
                 setUploadStatus("error uploading")
+                setShowbackDrop(false);
             })
     }
 
@@ -143,84 +151,98 @@ export default function AddImageAnchor() {
         }
     }
 
+
+    const [showbackDrop, setShowbackDrop] = React.useState(false);
+
     const [isInvalid, setIsInvalid] = useState(false);
     return (
         isInvalid ?
             <Redirect to="/" /> :
-            <div className={classes.container} key={'container'}>
-                {uploadStatus && <div>{uploadStatus}</div>}
-                <span>Please enter details for a new image anchor </span><br />
-                <form noValidate onSubmit={onFormSubmit} method="POST" encType="multipart/form-data"  >
+            <div>
+                <IconButton onClick={() => history.goBack()}>
+                    <ArrowBackIcon />
+                </IconButton>
 
-                    <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
-                    <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
-                        label='Description' value={editForm.description} onChange={handleChanges} />
+                <div className={classes.container} key={'container'}>
 
-                    <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='URL' value={editForm.url} onChange={handleChanges} />
 
-                    <input accept="image/png, image/jpeg, image/jpg"
-                        className={classes.input} id="uploadImages" type="file" name="imageName" onChange={handleChanges}
-                        key={editForm.imageName || 'im'} required
-                    />
-                    <label htmlFor="uploadImages" className={classes.fullWidth}>
-                        <MuiThemeProvider theme={formError.imageName.length > 0 ? errorTheme : theme}>
-                            <Button component="span" startIcon={<ImageIcon />}>   Upload a image  </Button>
-                            {formError.imageName.length > 0 && <div> Image is required</div>}
-                        </MuiThemeProvider>
-                    </label>
+                    <Backdrop className={classes.backdrop} open={showbackDrop} >
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
+                    {uploadStatus && <div>{uploadStatus}</div>}
 
-                    <div className={classes.divContainer}>
-                        <img src={editForm.imageName} alt="img" className={`${classes.videoThumbnail} ${editForm.imageName === '' ? classes.hidden : 'show'}`} />
-                        {editForm.imageName !== '' && (
-                            <MuiThemeProvider theme={errorTheme}>
-                                <Button onClick={() => clearInput('imageName')} className={classes.cancelBtn}>X</Button>
+                    <form noValidate onSubmit={onFormSubmit} method="POST" encType="multipart/form-data"  >
+
+                        <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
+                        <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
+                            label='Description' value={editForm.description} onChange={handleChanges} />
+
+                        <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='URL' value={editForm.url} onChange={handleChanges} />
+
+                        <input accept="image/png, image/jpeg, image/jpg"
+                            className={classes.input} id="uploadImages" type="file" name="imageName" onChange={handleChanges}
+                            key={editForm.imageName || 'im'} required
+                        />
+                        <label htmlFor="uploadImages" className={classes.fullWidth}>
+                            <MuiThemeProvider theme={formError.imageName.length > 0 ? errorTheme : theme}>
+                                <Button component="span" startIcon={<ImageIcon />}>   Upload a image  </Button>
+                                {formError.imageName.length > 0 && <div> Image is required</div>}
                             </MuiThemeProvider>
-                        )}
-                    </div>
+                        </label>
 
-                    <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight}
-                        label='Print height (in)' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
+                        <div className={classes.divContainer}>
+                            <img src={editForm.imageName} alt="img" className={`${classes.videoThumbnail} ${editForm.imageName === '' ? classes.hidden : 'show'}`} />
+                            {editForm.imageName !== '' && (
+                                <MuiThemeProvider theme={errorTheme}>
+                                    <Button onClick={() => clearInput('imageName')} className={classes.cancelBtn}>X</Button>
+                                </MuiThemeProvider>
+                            )}
+                        </div>
+
+                        <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight}
+                            label='Print height (in)' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
 
 
-                    <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth}
-                        label='Print width (in)' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
+                        <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth}
+                            label='Print width (in)' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
 
 
-                    <input accept="video/mp4, video/m4v, video/mov" className={classes.input} type="file" name="videoLink" id='uploadVideo'
-                        onChange={handleChanges} key={editForm.videoLink || 'vid'} required />
+                        <input accept="video/mp4, video/m4v, video/mov" className={classes.input} type="file" name="videoLink" id='uploadVideo'
+                            onChange={handleChanges} key={editForm.videoLink || 'vid'} required />
 
-                    <label htmlFor="uploadVideo" className={classes.fullWidth}>
-                        <MuiThemeProvider theme={formError.videoLink.length > 0 ? errorTheme : theme}>
-                            <Button component="span" startIcon={<VideoCallIcon />}>
-                                Upload a video
+                        <label htmlFor="uploadVideo" className={classes.fullWidth}>
+                            <MuiThemeProvider theme={formError.videoLink.length > 0 ? errorTheme : theme}>
+                                <Button component="span" startIcon={<VideoCallIcon />}>
+                                    Upload a video
                     </Button>
-                            {formError.videoLink.length > 0 && <div> Video is required</div>}
-                        </MuiThemeProvider>
-                    </label>
-                    <div className={classes.divContainer}>
-                        <div>{<p>Selected: {editForm.videoLink.name}</p> && editForm.videoLink.name}</div>
-                        <video controls id="videoPlayer"
-                            className={`${classes.videoThumbnail} ${editForm.videoLink === '' ? classes.hidden : 'show'}`}
-                            src={editForm.videoLink}>
-                        </video>
-                        {editForm.videoLink !== '' && (
-                            <MuiThemeProvider theme={errorTheme}>
-                                <Button onClick={() => clearInput('videoLink')} className={classes.cancelBtn}>X</Button>
+                                {formError.videoLink.length > 0 && <div> Video is required</div>}
                             </MuiThemeProvider>
-                        )}
-                    </div>
+                        </label>
+                        <div className={classes.divContainer}>
+                            <div>{<p>Selected: {editForm.videoLink.name}</p> && editForm.videoLink.name}</div>
+                            <video controls id="videoPlayer"
+                                className={`${classes.videoThumbnail} ${editForm.videoLink === '' ? classes.hidden : 'show'}`}
+                                src={editForm.videoLink}>
+                            </video>
+                            {editForm.videoLink !== '' && (
+                                <MuiThemeProvider theme={errorTheme}>
+                                    <Button onClick={() => clearInput('videoLink')} className={classes.cancelBtn}>X</Button>
+                                </MuiThemeProvider>
+                            )}
+                        </div>
 
-                    <ValidateText rows={3} multiline={true} name='sharingText' error={formError.sharingText.length > 0} errorMsg={formError.sharingText}
-                        label='Text to appear on sharing screens' value={editForm.sharingText} onChange={handleChanges} />
+                        <ValidateText rows={3} multiline={true} name='sharingText' error={formError.sharingText.length > 0} errorMsg={formError.sharingText}
+                            label='Text to appear on sharing screens' value={editForm.sharingText} onChange={handleChanges} />
+
+                        <br />
+                        <div className={classes.fullWidth}>
+                            <br /><hr />
+                            <Button type="submit" startIcon={<SaveIcon />} >Submit</Button>
+                        </div>
+                    </form>
 
                     <br />
-                    <div className={classes.fullWidth}>
-                        <br /><hr />
-                        <Button type="submit" startIcon={<SaveIcon />} >Submit</Button>
-                    </div>
-                </form>
-
-                <br />
+                </div>
             </div>
     );
 }

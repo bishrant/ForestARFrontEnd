@@ -9,6 +9,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { useHistory } from 'react-router-dom';
 import { showSnackbar } from '../utils/Snackbars';
+import { apiPath } from '../utils/config';
 
 export default function Forgotpassword() {
     const classes = formStyles();
@@ -20,7 +21,7 @@ export default function Forgotpassword() {
     const registerUser = (e: any) => {
         e.preventDefault();
         if (form.email !== '') {
-            api.post('/forgotpassword', {
+            api.post(apiPath + 'forgotpassword', {
                 ...form
             }).then((s: any) => {
                 const success = s.data.success;

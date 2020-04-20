@@ -6,7 +6,7 @@ import AddImageAnchor from './components/AddImageAnchor';
 import { MuiThemeProvider } from '@material-ui/core';
 import { theme } from './shared/theme';
 import Login from './components/login';
-import { ConfigProvider, config } from './utils/ConfigContext';
+// import { ConfigProvider, config } from './utils/ConfigContext';
 import { SnackbarProvider } from 'notistack';
 import Register from './components/register';
 import { loadState } from './utils/StateLoader';
@@ -17,6 +17,7 @@ import Activate from './components/Activate';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import ChangePassword from './components/ChangePassword';
+import { apiPath } from './utils/config';
 
 const App = (props: any) => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const App = (props: any) => {
       dispatch(signinUser(d))
 
       const data: any = JSON.stringify({ "token": _data.token })
-      fetch("/verifyToken", {
+      fetch(apiPath+ "verifyToken", {
         method: 'POST',
         body: data,
         headers: {
@@ -72,16 +73,16 @@ const App = (props: any) => {
     </SnackbarProvider>
   }
 
+  console.log(props.location.pathname, props.location.path, props.location);
 
   return (
     <MuiThemeProvider theme={theme}>
-      <ConfigProvider value={config}>
+      {/* <ConfigProvider value={config}> */}
         <CustomSnackBar>
-          <Router>
+          <Router basename='forestar'>
             <div>
               <Header />
             </div>
-            <br />
             <Switch>
               <PrivateRoute exact path="/">
                 <Home />
@@ -92,7 +93,7 @@ const App = (props: any) => {
               <Route exact path="/addanchor">
                 <AddImageAnchor />
               </Route>
-              <Route path="/editanchor/:id" children={<AddImageAnchor />} />
+              <PrivateRoute path="/editanchor/:id" children={<AddImageAnchor />} />
               <Route exact path="/login">
                 <Login />
               </Route>
@@ -114,7 +115,7 @@ const App = (props: any) => {
             </Switch>
           </Router>
         </CustomSnackBar>
-      </ConfigProvider>
+      {/* </ConfigProvider> */}
     </MuiThemeProvider>
   )
 }

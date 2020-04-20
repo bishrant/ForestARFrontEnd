@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { IconButton } from "@material-ui/core";
 
-const showSnackbar = (success: Boolean = false, openSnack: any, closeSnack: any, msg: any, target: any = "/", history: any, timeout: number = 10000) => {
+const showSnackbar = (success: Boolean = false, openSnack: any, closeSnack: any, msg: any, target: any = "/", history: any, timeout: number = 5000) => {
     openSnack(msg, {
         variant: success === false ? 'error': 'default',
         key: msg,
@@ -24,7 +24,7 @@ const showSnackbar = (success: Boolean = false, openSnack: any, closeSnack: any,
 
 
 
-const showErrors = (enqueueSnackbar: any, msg: any, target: any = "/", actions: any = null, closeSnackbar: any = null, timeout: number = 10000) => {
+const showErrors = (enqueueSnackbar: any, msg: any, target: any = "/", actions: any = null, closeSnackbar: any = null, timeout: number = 5000) => {
     enqueueSnackbar(msg, {
         variant: 'error',
         key: target,
@@ -48,7 +48,7 @@ const showErrors = (enqueueSnackbar: any, msg: any, target: any = "/", actions: 
 const showSuccess = (enqueueSnackbar: any, msg: any, target: string = "/", history: any, action: any, timeout: number = 5000) => {
     enqueueSnackbar(msg, {
         variant: 'default',
-        autoHideDuration: 5000,
+        autoHideDuration: timeout,
         onClose: (c: any) => {
             if (history !== null) {
                 history.replace(target);

@@ -11,6 +11,7 @@ import { useHistory, withRouter } from 'react-router-dom';
 import { showSnackbar } from '../utils/Snackbars';
 import { useDispatch } from 'react-redux';
 import { logout } from '../actions/userActions';
+import { apiPath } from '../utils/config';
 
 const ResetPassword = (props: any) => {
     const classes = formStyles();
@@ -36,7 +37,7 @@ const ResetPassword = (props: any) => {
 
         e.preventDefault();
         if (form.oldpassword !== '' && form.password !== '' && form.password2 !== '') {
-            api.post('/changepassword', {
+            api.post(apiPath + 'changepassword', {
                 ...form
             }).then((s: any) => {
                 if (s.data.success) {

@@ -38,7 +38,11 @@ const useStyles = makeStyles((theme: Theme) =>
             zIndex: 10,
             top: 0,
             right: 0
-        }
+        },
+        backdrop: {
+            zIndex: theme.zIndex.drawer + 1,
+            color: '#fff',
+          },
     }),
 );
 export default useStyles;

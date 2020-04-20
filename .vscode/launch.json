@@ -16,7 +16,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Launch Chrome on dev site",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
         }

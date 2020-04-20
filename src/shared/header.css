@@ -3,10 +3,16 @@
     #logoimgLg {
         display: none;
     }
+    .title {
+        font-size: 20px;
+    }
 }
 
 @media screen and (min-width: 600px) {
     #logoimgSm {
         display: none;
+    }
+    .title {
+        font-size: 26px;
     }
 }

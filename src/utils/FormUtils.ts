@@ -1,7 +1,7 @@
 
 
-const populateEditForm = (data: any, editForm: any) => {
-    let _f:any = {...editForm};
+const populateEditForm = (data: any, editForm: any, basepath : string= 'public/') => {
+    let _f: any = { ...editForm };
     _f.title = data.title;
     _f.id = data.id;
     _f.description = data.description;
@@ -10,8 +10,8 @@ const populateEditForm = (data: any, editForm: any) => {
     _f.physicalHeight = data.physicalHeight;
     _f.sharingText = data.sharingText;
     _f.folderName = data.folderName;
-    _f.imageName ='/' + data.folderName+"/"+ data.imageName;
-    _f.videoLink = '/' + data.folderName+"/"+ data.videoLink;
+    _f.imageName = basepath + data.folderName + "/" + data.imageName;
+    _f.videoLink = basepath + data.folderName + "/" + data.videoLink;
     return _f;
 }
 
@@ -20,9 +20,7 @@ const isNull = (val: any) => {
 }
 
 const requiredValidator = (val: any) => !isNull(val);
-const length10 = (val: any) => val.length > 10;
-
-
+// const length10 = (val: any) => val.length > 10;
 
 const formValidators: any = {
     title: { validator: [requiredValidator], messages: ["Title is required"] },
@@ -42,7 +40,6 @@ const validatorCategory: any = {
 const validateFormOnSubmit = (formError: any, editForm: any) => {
     const errors = { ...formError };
     let invalid: boolean[] = [];
-    console.log(editForm.imageName);
     for (var idx = 0; idx < Object.keys(formError).length; idx++) {
         const errorsForField: any = [];
         const k = Object.keys(formError)[idx];
@@ -62,7 +59,7 @@ const validateFormOnSubmit = (formError: any, editForm: any) => {
 }
 
 const checkFormForErrors = (formData: any) => {
-    const errList = {...formData}['errors'];
+    const errList = { ...formData }['errors'];
     console.log(errList);
     Object.keys(errList).forEach((k: any) => {
         if (errList[k]) {
@@ -72,4 +69,4 @@ const checkFormForErrors = (formData: any) => {
     return false;
 }
 
-export {populateEditForm, formValidators, validateFormOnSubmit, validatorCategory, checkFormForErrors}
+export { populateEditForm, formValidators, validateFormOnSubmit, validatorCategory, checkFormForErrors }

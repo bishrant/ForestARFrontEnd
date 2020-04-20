@@ -10,8 +10,8 @@ import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import formStyles from '../shared/formStyles';
 import { useHistory } from 'react-router-dom';
-import { IconButton } from '@material-ui/core';
-import { showSuccess, showErrors } from '../utils/Snackbars';
+import {  showSnackbar } from '../utils/Snackbars';
+import { apiPath } from '../utils/config';
 
 export default function Register() {
   const classes = formStyles();
@@ -19,38 +19,29 @@ export default function Register() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [error, setError] = useState('');
   const [success, setsuccess] = useState(false);
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    password2: ''
-  });
+  const [form, setForm] = useState({firstName: '', lastName: '', email: '', password: '', password2: ''});
 
   ValidatorForm.addValidationRule('isPasswordMatch', (value: any) => {
     return value === form.password;
   })
-  // customized
-  const action = (key: any) => (
-    <Fragment>
-      <IconButton color='inherit' size="small" onClick={() => { closeSnackbar(key); history.replace('/'); }}>
-        OK
-      </IconButton>
-    </Fragment>
-  );
 
   const registerUser = (e: any) => {
     e.preventDefault();
     if (form.email !== '' && form.password !== '') {
-      api.post('/signup', {
+      api.post(apiPath + 'signup', {
         ...form
       }).then((s: any) => {
-        setError('');
-        setsuccess(true);
-        showSuccess(enqueueSnackbar, `Please click on the activation link sent to your email ${form.email} to start using your account.`,  "/", history, action);
+        console.log(s);
+        if (s.data.success) {
+          setError('');
+          setsuccess(s.data.success);
+          showSnackbar(s.data.success, enqueueSnackbar, closeSnackbar, `Please click on the activation link sent to your email ${form.email} to start using your account.`, '/login', history);
+        } else {
+          throw new Error('Failed '+ s.mesage);
+        }
       })
         .catch((e: any) => {
-          showErrors(enqueueSnackbar, 'Failed to create an account. Please try again.', null )
+          showSnackbar(false, enqueueSnackbar, closeSnackbar, 'Failed to create an account. Please try again.',null, history);
           setError('Failed to create an account. Please try again. ');
         });
     } else {
@@ -66,7 +57,6 @@ export default function Register() {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-
       <div className={classes.paper}>
         <Typography component="h1" variant="h5"> Register </Typography>
 
@@ -98,7 +88,7 @@ export default function Register() {
               <Grid container>
 
                 <Grid item>
-                  <Link href="/login" variant="body2">
+                  <Link  variant="body2" onClick={() => history.push('/login')}>
                     {"Already have an account? Sign In"}
                   </Link>
                 </Grid>

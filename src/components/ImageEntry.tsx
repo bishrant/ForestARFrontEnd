@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ImageCard from './ImageEntryCard';
 import { api } from '../utils/oauth';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { apiPath } from '../utils/config';
 
 const ImageEntryComp = () => {
     const [images, setImages] = useState();
@@ -10,7 +12,7 @@ const ImageEntryComp = () => {
     }, []);
 
     const getAllAnchors = () => {
-        api.post('/getAnchorImagesByUser')
+        api.post(apiPath + 'getAnchorImagesByUser')
             .then((d: any) => {
                 setImages(d.data);
             }).catch((e: any) => {
@@ -22,7 +24,7 @@ const ImageEntryComp = () => {
         const confirmed = window.confirm("Are you sure you want to delete this entry. This can't be undone.");
 
         if (confirmed) {
-            api.post('/deleteAnchor' , { id: id })
+            api.post(apiPath + 'deleteAnchor' , { id: id })
                 .then((d: any) => {
                     if (d.data.success) {
                         getAllAnchors();
@@ -48,7 +50,7 @@ const ImageEntryComp = () => {
 
                 </div>
 
-            ) : (<div>loading</div>)
+            ) : (<div>loading <CircularProgress color="inherit" /></div>)
         )
 }
 

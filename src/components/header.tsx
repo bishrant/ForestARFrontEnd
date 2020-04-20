@@ -59,7 +59,7 @@ const Header = (props: any) => {
                             <img height="30" alt="tfs logo" id='logoimgLg' src={logo} />
                             <img height="30" alt="tfs logo" id='logoimgSm' src={logoStar} />
                             </a>
-                            <Link to="/" style={{ textDecoration: 'none' }}> <Button >Forest AR</Button></Link>
+                            <Link to="/" style={{ textDecoration: 'none' }}> <Button className='title'>Forest AR</Button></Link>
                             
                         </div>
                     </Grid>

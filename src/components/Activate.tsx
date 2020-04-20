@@ -14,7 +14,7 @@ const Activate = (props: any) => {
         Axios.post("/activate", { token: token })
             .then((r) => {
                 const success = r.data.success;
-                const msg = success ? 'Successfully activated your account. Please login to continue' : 'Failed to actvate your account. Invalid or expired token';
+                const msg = success ? 'Successfully verified your email. Please wait for an admin to activate your account' : 'Failed to activate your account. Invalid or expired token';
                 showSnackbar(success, enqueueSnackbar, closeSnackbar, msg, '/login', history)
             })
             .catch((e) => {

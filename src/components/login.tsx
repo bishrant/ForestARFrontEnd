@@ -12,7 +12,8 @@ import formStyles from '../shared/formStyles';
 import { connect, useDispatch } from 'react-redux';
 import { signinUser } from '../actions/userActions';
 import { useHistory } from 'react-router-dom';
-import { showErrors } from '../utils/Snackbars';
+import { showSnackbar } from '../utils/Snackbars';
+import { apiPath } from '../utils/config';
 
 const Login = (props: any) => {
   const history = useHistory();
@@ -28,17 +29,22 @@ const Login = (props: any) => {
   const loginUser = (e: any) => {
     e.preventDefault();
     if (form.email !== '' && form.password !== '') {
-      api.post('/login', {
+      api.post(apiPath + 'login', {
         ...form
       }).then((s: any) => {
-        setError('');
-        closeSnackbar();
-        dispatch(signinUser(s.data));
-        history.push("/")
+        if (s.data.success) {
+          setError('');
+          closeSnackbar();
+          dispatch(signinUser(s.data.data));
+          history.push("/")
+        } else {
+          setError(s.data.message);
+          showSnackbar(false, enqueueSnackbar, closeSnackbar, s.data.message, null, history);
+        }
+
       })
         .catch((e: any) => {
-          console.log(e);
-          showErrors(enqueueSnackbar, 'Login failed. Invalid email and/or password.', null)
+          showSnackbar(false, enqueueSnackbar, closeSnackbar, 'Login failed. Invalid email and/or password.', null, history);
           setError('Login failed. Invalid email and/or password.');
         });
     } else {
@@ -73,12 +79,12 @@ const Login = (props: any) => {
 
         <Grid container>
           <Grid item xs>
-            <Link href="/forgotpassword" variant="body2" >
+            <Link variant="body2" onClick={() => history.push('/forgotpassword')} >
               Forgot password?
                 </Link>
           </Grid>
           <Grid item>
-            <Link href="/register" variant="body2">
+            <Link variant="body2" onClick={() => history.push('/register')}>
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>
