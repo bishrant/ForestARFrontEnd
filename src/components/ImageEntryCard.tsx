@@ -38,6 +38,9 @@ const useStyles = makeStyles({
     maxHeight: '100px',
     margin: 'auto',
     width: '100%',
+  },
+  cardChildren: {
+    flex: 1
   }
 });
 
@@ -50,8 +53,8 @@ const ImageCard = (props: any) => {
   const classes = useStyles();
   return (
     <Card className={classes.card}  >
-      <CardActionArea >
-        <CardContent>
+      {/* <CardActionArea > */}
+        <CardContent className={classes.cardChildren}>
 
           <Typography className={classes.title} color="textPrimary" gutterBottom>
             {props.image.title}
@@ -67,7 +70,7 @@ const ImageCard = (props: any) => {
             <a href={props.image.url}>{props.image.url}</a>
           </Typography>
         </CardContent>
-      </CardActionArea>
+      {/* </CardActionArea> */}
       <div style={{ margin: 'auto' }}>
         <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
           Edit</Button><br /><br />

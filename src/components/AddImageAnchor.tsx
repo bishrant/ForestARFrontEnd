@@ -23,7 +23,7 @@ import { apiPath } from '../utils/config';
 export default function AddImageAnchor() {
     let { id } = useParams();
     const classes = useStyles();
-    const [uploadStatus, setUploadStatus] = useState();
+    const [uploadStatus, setUploadStatus] = useState('');
     const history = useHistory();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [fileNames, setFileNames] = useState<any>({
@@ -33,7 +33,7 @@ export default function AddImageAnchor() {
         videoLink: ''
     });
     const populateForm = (data: any) => {
-        const _f = populateEditForm(data, editForm, process.env.REACT_APP_ROOT + 'public/');
+        const _f = populateEditForm(data, editForm, apiPath + 'public/');
         console.log(_f);
         setEditForm(_f);
         console.log(editForm)
@@ -67,29 +67,36 @@ export default function AddImageAnchor() {
         setFormError(errors);
         if (isValid) return;
         const formData = new FormData();
+        const files:any = {};
         const d = { ...editForm };
         Object.keys(d).map((keyName, i) => {
             if (keyName === 'imageName' || keyName === 'videoLink') {
                 if (fileNames[keyName + 'blob'] !== null && (typeof fileNames[keyName + 'blob'] !== undefined) && fileNames[keyName + 'blob'] !== undefined) {
-                    console.log(typeof fileNames[keyName + 'blob'] === undefined, fileNames[keyName + 'blob'] === undefined, keyName + 'blob')
-                    formData.append(keyName, fileNames[keyName + 'blob'], fileNames[keyName])
+                    files[keyName] = [fileNames[keyName + 'blob'], fileNames[keyName]]
+                    
                 }
             } else {
                 formData.append(keyName, d[keyName]);
             }
             return null;
+        });
+        // debugger;
+        // need to add those files at the very end of form data so that multer can grab them in order
+        Object.keys(files).forEach(fileKey => {
+            formData.append(fileKey, files[fileKey][0], files[fileKey][1]);
         })
+
         const config = { headers: { 'content-type': 'multipart/form-data' } }
         console.log(d)
         api.post(apiPath+ "addAnchor", formData, config)
             .then((s: any) => {
                 const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
-                showSnackbar(true, enqueueSnackbar, closeSnackbar, msg, '/home', history);
+                showSnackbar(true, enqueueSnackbar, closeSnackbar, msg, '/home', history, 500);
                 setUploadStatus('successfully updated');
                 setShowbackDrop(false);
             })
             .catch((e: any) => {
-                showSnackbar(false, enqueueSnackbar, closeSnackbar, "Error uploading. Please try again.", null, history);
+                showSnackbar(false, enqueueSnackbar, closeSnackbar, "Error uploading. Please try again.", null, history, 1000);
                 setUploadStatus("error uploading")
                 setShowbackDrop(false);
             })

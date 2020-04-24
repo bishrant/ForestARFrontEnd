@@ -2,6 +2,7 @@
 
 const populateEditForm = (data: any, editForm: any, basepath : string= 'public/') => {
     let _f: any = { ...editForm };
+    _f.folderName = data.folderName;
     _f.title = data.title;
     _f.id = data.id;
     _f.description = data.description;
@@ -9,7 +10,6 @@ const populateEditForm = (data: any, editForm: any, basepath : string= 'public/'
     _f.physicalWidth = data.physicalWidth;
     _f.physicalHeight = data.physicalHeight;
     _f.sharingText = data.sharingText;
-    _f.folderName = data.folderName;
     _f.imageName = basepath + data.folderName + "/" + data.imageName;
     _f.videoLink = basepath + data.folderName + "/" + data.videoLink;
     return _f;

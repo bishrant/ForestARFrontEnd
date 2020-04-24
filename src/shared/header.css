@@ -13,6 +13,14 @@
         display: none;
     }
     .title {
-        font-size: 26px;
+        font-size: 29px;
     }
+}
+.title{
+    color: white;
+    padding-left: 10px;
+}
+
+.title:hover {
+    color: white;
 }
