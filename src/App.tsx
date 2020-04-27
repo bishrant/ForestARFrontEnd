@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, withRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter, withRouter, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Header from './components/header';
 import AddImageAnchor from './components/AddImageAnchor';
@@ -79,7 +79,7 @@ const App = (props: any) => {
     <MuiThemeProvider theme={theme}>
       {/* <ConfigProvider value={config}> */}
         <CustomSnackBar>
-          <Router basename='forestar'>
+          <HashRouter >
             <div>
               <Header />
             </div>
@@ -113,7 +113,7 @@ const App = (props: any) => {
                 <ChangePassword />
               </PrivateRoute>
             </Switch>
-          </Router>
+          </HashRouter>
         </CustomSnackBar>
       {/* </ConfigProvider> */}
     </MuiThemeProvider>

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
             right: 0
         },
         backdrop: {
-            zIndex: theme.zIndex.drawer + 1,
+            zIndex: '10000 !important' as any,
             color: '#fff',
           },
     }),

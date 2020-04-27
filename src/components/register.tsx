@@ -4,7 +4,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { api } from '../utils/oauth';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -12,10 +11,14 @@ import formStyles from '../shared/formStyles';
 import { useHistory } from 'react-router-dom';
 import {  showSnackbar } from '../utils/Snackbars';
 import { apiPath } from '../utils/config';
+import useStyles from './AddImageStyle';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 export default function Register() {
   const classes = formStyles();
   const history = useHistory();
+  const layouts = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [error, setError] = useState('');
   const [success, setsuccess] = useState(false);
@@ -55,9 +58,12 @@ export default function Register() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+    <div>
+    <IconButton onClick={() => history.goBack()} aria-label="back">
+        <ArrowBackIcon />
+    </IconButton>
+    <CssBaseline />
+    <div className={layouts.container}>
         <Typography component="h1" variant="h5"> Register </Typography>
 
         {error !== '' && <div className={`${classes.fullWidth} ${classes.error}`}>{error}</div>}
@@ -65,7 +71,7 @@ export default function Register() {
           <div>
             <ValidatorForm className={classes.form} onSubmit={registerUser} onError={errors => console.log(errors)}>
               <TextValidator label="First Name" onChange={handleChange} name="firstName" variant="outlined"
-                fullWidth value={form.firstName} validators={['required']} errorMessages={['First name is required']} />
+               aria-label="first name" fullWidth value={form.firstName} validators={['required']} errorMessages={['First name is required']} />
 
               <TextValidator label="Last Name" onChange={handleChange} name="lastName" variant="outlined" fullWidth
                 value={form.lastName} validators={['required']} errorMessages={['Last name is required']} />
@@ -76,19 +82,19 @@ export default function Register() {
               <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
                 fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} />
 
-              <TextValidator label="Confirm password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
+              <TextValidator label="Confirm Password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
                 fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
                 errorMessages={['Password is required', 'Password mismatch']} />
 
               <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
-                Sign In
+                Register
               </Button>
             </ValidatorForm>
             <Fragment>
               <Grid container>
 
                 <Grid item>
-                  <Link  variant="body2" onClick={() => history.push('/login')}>
+                  <Link  variant="body2" onClick={() => history.push('/login')} className="pointerCursor">
                     {"Already have an account? Sign In"}
                   </Link>
                 </Grid>
@@ -98,6 +104,6 @@ export default function Register() {
         }
 
       </div>
-    </Container>
+    </div>
   );
 }

@@ -2,7 +2,6 @@ import React, { useState, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { api } from '../utils/oauth';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -12,9 +11,13 @@ import { showSnackbar } from '../utils/Snackbars';
 import { useDispatch } from 'react-redux';
 import { logout } from '../actions/userActions';
 import { apiPath } from '../utils/config';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import useStyles from './AddImageStyle';
 
 const ResetPassword = (props: any) => {
     const classes = formStyles();
+    const layouts = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
     const token = props.match.params.token;
@@ -43,7 +46,7 @@ const ResetPassword = (props: any) => {
                 if (s.data.success) {
                     setError('');
                     setsuccess(true);
-                    showSnackbar(true, enqueueSnackbar, closeSnackbar, 'Successfully changed password. Please login to continue.', '/login', history);
+                    showSnackbar(true, enqueueSnackbar, closeSnackbar, 'Successfully changed password. Please login to continue.', '/login', history, 4000);
                     dispatch(logout())
                 } else {
                     throw new Error('Failed to change password')
@@ -64,10 +67,12 @@ const ResetPassword = (props: any) => {
 
 
     return (
-        <Container component="main" maxWidth="xs">
+        <div>
+            <IconButton onClick={() => history.goBack()} aria-label="go back">
+                <ArrowBackIcon />
+            </IconButton>
             <CssBaseline />
-
-            <div className={classes.paper}>
+            <div className={layouts.container}>
                 <Typography component="h1" variant="h5"> Change password </Typography>
 
                 {error !== '' && <div className={`${classes.fullWidth} ${classes.error}`}>{error}</div>}
@@ -91,13 +96,11 @@ const ResetPassword = (props: any) => {
 
                         </ValidatorForm>
                         <Fragment>
-
                         </Fragment>
                     </div>
                 }
-
             </div>
-        </Container>
+        </div>
     );
 }
 

@@ -63,6 +63,7 @@ export default function AddImageAnchor() {
         event.preventDefault();
         setShowbackDrop(true);
         console.log(id);
+       
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
         if (isValid) return;
@@ -87,7 +88,9 @@ export default function AddImageAnchor() {
         })
 
         const config = { headers: { 'content-type': 'multipart/form-data' } }
-        console.log(d)
+        console.log(d);
+        
+       
         api.post(apiPath+ "addAnchor", formData, config)
             .then((s: any) => {
                 const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
@@ -166,7 +169,7 @@ export default function AddImageAnchor() {
         isInvalid ?
             <Redirect to="/" /> :
             <div>
-                <IconButton onClick={() => history.goBack()}>
+                <IconButton onClick={() => history.goBack()} aria-label="go back">
                     <ArrowBackIcon />
                 </IconButton>
 

@@ -79,12 +79,12 @@ const Login = (props: any) => {
 
         <Grid container>
           <Grid item xs>
-            <Link variant="body2" onClick={() => history.push('/forgotpassword')} >
+            <Link variant="body2" onClick={() => history.push('/forgotpassword')} className="pointerCursor">
               Forgot password?
                 </Link>
           </Grid>
           <Grid item>
-            <Link variant="body2" onClick={() => history.push('/register')}>
+            <Link variant="body2" onClick={() => history.push('/register')} className="pointerCursor">
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>

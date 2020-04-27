@@ -3,11 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { CardMedia, CardActionArea, Button, MuiThemeProvider } from '@material-ui/core';
+import { CardMedia, Button, MuiThemeProvider } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { errorTheme } from '../shared/theme';
 import { apiPath } from '../utils/config';
+import CreateIcon from '@material-ui/icons/Create';
 
 const useStyles = makeStyles({
   card: {
@@ -67,12 +68,12 @@ const ImageCard = (props: any) => {
           <Typography variant="body2" component="p">
             {props.image.description}
             <br />
-            <a href={props.image.url}>{props.image.url}</a>
+            <a href={props.image.url} target="_blank" rel="noopener noreferrer">{props.image.url}</a>
           </Typography>
         </CardContent>
       {/* </CardActionArea> */}
       <div style={{ margin: 'auto' }}>
-        <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
+        <Button className={classes.deleteBtn} startIcon={<CreateIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
           Edit</Button><br /><br />
         <MuiThemeProvider theme={errorTheme}>
           <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { props.onDelete(props.image.id) }} >

@@ -2,7 +2,6 @@ import React, { useState, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { api } from '../utils/oauth';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -10,13 +9,18 @@ import formStyles from '../shared/formStyles';
 import { useHistory } from 'react-router-dom';
 import { showSnackbar } from '../utils/Snackbars';
 import { apiPath } from '../utils/config';
+import useStyles from './AddImageStyle';
+import { IconButton, MuiThemeProvider } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { theme } from '../shared/theme';
 
 export default function Forgotpassword() {
     const classes = formStyles();
     const history = useHistory();
+    const layouts = useStyles();
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [error, setError] = useState('');
-    const [form, setForm] = useState({email: ''});
+    const [form, setForm] = useState({ email: '' });
 
     const registerUser = (e: any) => {
         e.preventDefault();
@@ -45,20 +49,24 @@ export default function Forgotpassword() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <div>
+            <MuiThemeProvider theme={theme}>
+            <IconButton onClick={() => history.goBack()} aria-label="go back">
+                <ArrowBackIcon />
+            </IconButton>
             <CssBaseline />
-            <div className={classes.paper}>
+            <div className={layouts.container}>
                 <Typography component="h1" variant="h5"> Reset your password </Typography>
                 {error !== '' && <div className={`${classes.fullWidth} ${classes.error}`}>{error}</div>}
                 {error === '' &&
                     <div>
-                        Please enter the email address associated with your account <br></br>
+                        <span >Please enter the email address associated with your account</span><br></br>
                         <ValidatorForm className={classes.form} onSubmit={registerUser} onError={errors => console.log(errors)}>
-                            <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth 
-                            value={form.email} validators={['required', 'isEmail']} 
-                            errorMessages={['Email is required', 'Email is not valid']} />
+                            <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth
+                                value={form.email} validators={['required', 'isEmail']}
+                                errorMessages={['Email is required', 'Email is not valid']} />
 
-                            <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
+                            <Button fullWidth variant="contained"  className={classes.submit}>
                                 Reset Password
                             </Button>
                         </ValidatorForm>
@@ -69,6 +77,7 @@ export default function Forgotpassword() {
                 }
 
             </div>
-        </Container>
+            </MuiThemeProvider>
+        </div>
     );
 }

@@ -11,7 +11,7 @@ const showSnackbar = (success: Boolean = false, openSnack: any, closeSnack: any,
                 history.push(target)
             }
         },
-        action: <Fragment><IconButton color='inherit' size="small" onClick={() => { 
+        action: <Fragment><IconButton aria-label="close" color='inherit' size="small" onClick={() => { 
             closeSnack(msg); 
             if (target !== null) {
                 history.push(target);
@@ -33,7 +33,7 @@ const showErrors = (enqueueSnackbar: any, msg: any, target: any = "/", actions: 
             console.log(target);
             
         },
-        action: <Fragment><IconButton color='inherit' size="small" onClick={() => { 
+        action: <Fragment><IconButton aria-label="close"  color='inherit' size="small" onClick={() => { 
             closeSnackbar(target); 
             if (target !== null) {
                 window.location.replace(target)

@@ -5,13 +5,14 @@ import { useSnackbar } from 'notistack';
 import { Container, CssBaseline } from '@material-ui/core';
 import formStyles from '../shared/formStyles';
 import { showSnackbar } from '../utils/Snackbars';
+import { apiPath } from '../utils/config';
 
 const Activate = (props: any) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const token = props.match.params.token;
     const history = useHistory();
     const activateToken = async (token: string) => {
-        Axios.post("/activate", { token: token })
+        Axios.post(apiPath + "activate", { token: token })
             .then((r) => {
                 const success = r.data.success;
                 const msg = success ? 'Successfully verified your email. Please wait for an admin to activate your account' : 'Failed to activate your account. Invalid or expired token';
