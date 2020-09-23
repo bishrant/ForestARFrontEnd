@@ -61,20 +61,22 @@ export default function AddImageAnchor() {
 
     const onFormSubmit = async (event: any) => {
         event.preventDefault();
-        setShowbackDrop(true);
-        console.log(id);
        
+
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
         if (isValid) return;
+
+        setShowbackDrop(true);
+        console.log(id);
         const formData = new FormData();
-        const files:any = {};
+        const files: any = {};
         const d = { ...editForm };
         Object.keys(d).map((keyName, i) => {
             if (keyName === 'imageName' || keyName === 'videoLink') {
                 if (fileNames[keyName + 'blob'] !== null && (typeof fileNames[keyName + 'blob'] !== undefined) && fileNames[keyName + 'blob'] !== undefined) {
                     files[keyName] = [fileNames[keyName + 'blob'], fileNames[keyName]]
-                    
+
                 }
             } else {
                 formData.append(keyName, d[keyName]);
@@ -89,9 +91,9 @@ export default function AddImageAnchor() {
 
         const config = { headers: { 'content-type': 'multipart/form-data' } }
         console.log(d);
-        
-       
-        api.post(apiPath+ "addAnchor", formData, config)
+
+
+        api.post(apiPath + "addAnchor", formData, config)
             .then((s: any) => {
                 const msg = typeof id === 'undefined' ? "Successfully added new entry" : "Successfully updated entry";
                 showSnackbar(true, enqueueSnackbar, closeSnackbar, msg, '/home', history, 500);
@@ -187,7 +189,7 @@ export default function AddImageAnchor() {
                         <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
                             label='Description' value={editForm.description} onChange={handleChanges} />
 
-                        <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='URL' value={editForm.url} onChange={handleChanges} />
+                        <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='Website to link from video' value={editForm.url} onChange={handleChanges} />
 
                         <input accept="image/png, image/jpeg, image/jpg"
                             className={classes.input} id="uploadImages" type="file" name="imageName" onChange={handleChanges}
@@ -195,7 +197,7 @@ export default function AddImageAnchor() {
                         />
                         <label htmlFor="uploadImages" className={classes.fullWidth}>
                             <MuiThemeProvider theme={formError.imageName.length > 0 ? errorTheme : theme}>
-                                <Button component="span" startIcon={<ImageIcon />}>   Upload a image  </Button>
+                                <Button component="span" startIcon={<ImageIcon />}>   Upload an image  </Button>
                                 {formError.imageName.length > 0 && <div> Image is required</div>}
                             </MuiThemeProvider>
                         </label>
@@ -209,6 +211,12 @@ export default function AddImageAnchor() {
                             )}
                         </div>
 
+                        <br />
+                        <div style={{ textAlign: 'center' }}>
+                            Images will scan more successfully if the app knows their physical dimensions.  What size do you expect the image to be in its printed form that people will be scanning?
+                        <br />
+                        </div>
+
                         <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight}
                             label='Print height (in)' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
 
@@ -216,10 +224,11 @@ export default function AddImageAnchor() {
                         <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth}
                             label='Print width (in)' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
 
-
+                        <br />
                         <input accept="video/mp4, video/m4v, video/mov" className={classes.input} type="file" name="videoLink" id='uploadVideo'
                             onChange={handleChanges} key={editForm.videoLink || 'vid'} required />
 
+                        <br />
                         <label htmlFor="uploadVideo" className={classes.fullWidth}>
                             <MuiThemeProvider theme={formError.videoLink.length > 0 ? errorTheme : theme}>
                                 <Button component="span" startIcon={<VideoCallIcon />}>

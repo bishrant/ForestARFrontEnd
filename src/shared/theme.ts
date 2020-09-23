@@ -10,14 +10,16 @@ const center = {
   };
 const theme = createMuiTheme({
     palette: {
-        primary: blueGrey,
+        primary: {
+            main: '#10EBFC'
+        },
         secondary: deepOrange,
         error: red
     },
     overrides: {
         MuiButton: {
             root: {
-                backgroundColor: blueGrey[600],
+                backgroundColor: 'rgb(19 179 191)',//blueGrey[600],
                 color: 'white',
                 '&:hover': {
                     backgroundColor: blueGrey[900]

@@ -11,9 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect, useSelector } from 'react-redux';
 import { logout } from '../actions/userActions';
 import "../shared/header.css";
-import { theme} from '../shared/theme';
-import { green,  red, brown, blueGrey,grey, indigo, deepOrange } from "@material-ui/core/colors";
-
+import {  blueGrey } from "@material-ui/core/colors";
 
 const headerStyle = makeStyles(theme => ({
     userHeader: {
@@ -46,7 +44,7 @@ const Header = (props: any) => {
     };
 
     return ( 
-        <AppBar position="static" style={{ backgroundColor: blueGrey[600] }}>
+        <AppBar position="static" style={{ backgroundColor: 'rgb(19 179 191)' }}>
             <Toolbar>
                 <Grid
                     alignItems="center"

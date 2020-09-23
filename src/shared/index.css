@@ -21,3 +21,8 @@ body {
 .pointerCursor {
   cursor: pointer;
 }
+
+.MuiFab-root:hover {
+  text-decoration: none;
+  background-color: rgb(19 179 191) !important;
+}

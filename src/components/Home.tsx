@@ -16,9 +16,10 @@ const Home = () => {
       },
       fab: {
         position: "fixed",
-        bottom: theme.spacing(2),
+        top: theme.spacing(2)+60,
         right: theme.spacing(2),
         color: 'white',
+        background: 'rgb(42 124 130)',
         zIndex: 5
       },
     })
@@ -30,7 +31,7 @@ const Home = () => {
   const addAnchor = () => history.push('/addanchor')
   return (<div>
     <React.Fragment>
-      <Fab color="primary" aria-label="add" className={classes.fab} onClick={addAnchor}>
+      <Fab color="inherit" aria-label="add" className={classes.fab} onClick={addAnchor}>
         <AddIcon />
       </Fab>
       <CssBaseline />
