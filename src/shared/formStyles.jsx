@@ -21,9 +21,9 @@ const formStyles = makeStyles(theme => ({
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
-      backgroundColor: theme.palette.primary[600],
+      backgroundColor: theme.palette.primary.main,
       '&:hover': {
-        backgroundColor: theme.palette.primary[900],
+        backgroundColor: theme.palette.primary.main,
       }
     },
     error: {

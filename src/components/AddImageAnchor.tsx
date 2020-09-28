@@ -61,7 +61,7 @@ export default function AddImageAnchor() {
 
     const onFormSubmit = async (event: any) => {
         event.preventDefault();
-       
+
 
         const [errors, isValid] = validateFormOnSubmit(formError, editForm)
         setFormError(errors);
@@ -113,9 +113,10 @@ export default function AddImageAnchor() {
         url: '',
         imageName: '',
         videoLink: '',
+        publicVideoLink: '',
         physicalHeight: '',
         physicalWidth: '',
-        sharingText: '',
+        sharingText: '\nI found this video by scanning an image with the #ForestAR app developed by @TXForestService. ',
         folderName: ''
     });
 
@@ -126,12 +127,14 @@ export default function AddImageAnchor() {
         url: '',
         imageName: [],
         videoLink: [],
+        publicVideoLink: '',
         physicalHeight: [],
         physicalWidth: [],
         sharingText: []
     });
 
-    const checkForError = (name: any, value: any) => {
+    const checkForError = (name: any, target: any) => {
+        const value = target.value;
         const err = !formValidators[name]['validator'][0](value);
         setFormError({
             ...formError,
@@ -159,7 +162,7 @@ export default function AddImageAnchor() {
                 ...editForm,
                 [_name]: e.target.value
             });
-            checkForError(_name, e.target.value);
+            checkForError(_name, e.target);
         }
     }
 
@@ -185,11 +188,11 @@ export default function AddImageAnchor() {
 
                     <form noValidate onSubmit={onFormSubmit} method="POST" encType="multipart/form-data"  >
 
-                        <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} />
-                        <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description}
+                        <ValidateText name='title' error={formError.title.length > 0} errorMsg={formError.title} label='Title' value={editForm.title} onChange={handleChanges} aa="title" />
+                        <ValidateText rows={3} multiline={true} name='description' error={formError.description.length > 0} errorMsg={formError.description} aa="Description"
                             label='Description' value={editForm.description} onChange={handleChanges} />
 
-                        <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='Website to link from video' value={editForm.url} onChange={handleChanges} />
+                        <ValidateText name='url' error={formError.url.length > 0} errorMsg={formError.url} label='Website to link from video' value={editForm.url} onChange={handleChanges} aa="URL"/>
 
                         <input accept="image/png, image/jpeg, image/jpg"
                             className={classes.input} id="uploadImages" type="file" name="imageName" onChange={handleChanges}
@@ -217,11 +220,11 @@ export default function AddImageAnchor() {
                         <br />
                         </div>
 
-                        <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight}
+                        <ValidateText name='physicalHeight' type="number" error={formError.physicalHeight.length > 0} errorMsg={formError.physicalHeight} aa="height"
                             label='Print height (in)' splitView="true" value={editForm.physicalHeight} onChange={handleChanges} />
 
 
-                        <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth}
+                        <ValidateText name='physicalWidth' type="number" error={formError.physicalWidth.length > 0} errorMsg={formError.physicalWidth} aa="width"
                             label='Print width (in)' splitView="true" value={editForm.physicalWidth} onChange={handleChanges} />
 
                         <br />
@@ -250,8 +253,13 @@ export default function AddImageAnchor() {
                             )}
                         </div>
 
-                        <ValidateText rows={3} multiline={true} name='sharingText' error={formError.sharingText.length > 0} errorMsg={formError.sharingText}
+                        <ValidateText name='publicVideoLink' error={formError.publicVideoLink.length > 0} errorMsg={formError.publicVideoLink} aa="video link"
+                        label='Link to video on Youtube or other publicly accessible domain' value={editForm.publicVideoLink} onChange={handleChanges} /> <br/>
+
+                        <ValidateText rows={3} multiline={true} name='sharingText' error={formError.sharingText.length > 0} errorMsg={formError.sharingText} maxLength={280} type="text"
+                        aa="sharing text"
                             label='Text to appear on sharing screens' value={editForm.sharingText} onChange={handleChanges} />
+                            <div style={{color: editForm.sharingText.length > 230 ? "orange": "black"}}>{editForm.sharingText.length}/280</div>
 
                         <br />
                         <div className={classes.fullWidth}>

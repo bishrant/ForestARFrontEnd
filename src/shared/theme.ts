@@ -2,6 +2,7 @@ import { createMuiTheme } from "@material-ui/core";
 import {  red,  blueGrey, indigo, deepOrange } from "@material-ui/core/colors";
 
 const top = {top : 120};
+const bg = 'rgb(16 127 135)';
 // const right
 const center = {
     left: '50%',
@@ -11,7 +12,7 @@ const center = {
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: '#10EBFC'
+            main: bg
         },
         secondary: deepOrange,
         error: red
@@ -19,7 +20,7 @@ const theme = createMuiTheme({
     overrides: {
         MuiButton: {
             root: {
-                backgroundColor: 'rgb(19 179 191)',//blueGrey[600],
+                backgroundColor: bg,//blueGrey[600],
                 color: 'white',
                 '&:hover': {
                     backgroundColor: blueGrey[900]
@@ -47,6 +48,15 @@ const theme = createMuiTheme({
             }
            
         },
+        MuiInputLabel: { // Name of the component ⚛️ / style sheet
+            root: { // Name of the rule
+             
+              "&$focused": { // increase the specificity for the pseudo class
+                color: "black",
+                fontWeight: "bold"
+              }
+            }
+          },
         
         MuiSnackbarContent: {
             

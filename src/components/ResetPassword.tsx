@@ -76,11 +76,11 @@ const ResetPassword = (props: any) => {
                         <ValidatorForm className={classes.form} onSubmit={changePassword} onError={errors => console.log(errors)}>
 
                             <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
-                                fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} />
+                                fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} inputProps={{"aria-label":"Password"}}/>
 
                             <TextValidator label="Confirm password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
                                 fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
-                                errorMessages={['Password is required', 'Password mismatch']} />
+                                errorMessages={['Password is required', 'Password mismatch']} inputProps={{"aria-label":"Password 2"}} />
                             <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>
                                 Reset Password
                             </Button>

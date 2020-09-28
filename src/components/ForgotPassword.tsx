@@ -63,7 +63,7 @@ export default function Forgotpassword() {
                         <span >Please enter the email address associated with your account</span><br></br>
                         <ValidatorForm className={classes.form} onSubmit={registerUser} onError={errors => console.log(errors)}>
                             <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth
-                                value={form.email} validators={['required', 'isEmail']}
+                                value={form.email} validators={['required', 'isEmail']} inputProps={{"aria-label":"Email"}}
                                 errorMessages={['Email is required', 'Email is not valid']} />
 
                             <Button fullWidth variant="contained"  className={classes.submit}>

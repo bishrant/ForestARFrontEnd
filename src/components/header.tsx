@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect, useSelector } from 'react-redux';
 import { logout } from '../actions/userActions';
 import "../shared/header.css";
-import {  blueGrey } from "@material-ui/core/colors";
 
 const headerStyle = makeStyles(theme => ({
     userHeader: {
@@ -44,7 +43,7 @@ const Header = (props: any) => {
     };
 
     return ( 
-        <AppBar position="static" style={{ backgroundColor: 'rgb(19 179 191)' }}>
+        <AppBar position="static" className="AppBar">
             <Toolbar>
                 <Grid
                     alignItems="center"
@@ -60,7 +59,7 @@ const Header = (props: any) => {
                             <img height="30" alt="tfs logo" id='logoimgLg' src={logo} />
                             <img height="30" alt="tfs logo" id='logoimgSm' src={logoStar} />
                             </a>
-                            <Link to="/" style={{ textDecoration: 'none' }} className="title"> Forest AR CMS</Link>
+                            <Link to="home" style={{ textDecoration: 'none' }} className="title"> Forest AR CMS</Link>
                             
                         </div>
                     </Grid>

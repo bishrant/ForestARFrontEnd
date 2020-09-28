@@ -28,6 +28,7 @@ const formValidators: any = {
     url: { validator: [requiredValidator], messages: ["URL is required"] },
     imageName: { validator: [requiredValidator], messages: ["Image is required"] },
     videoLink: { validator: [requiredValidator], messages: ["Video is required"] },
+    publicVideoLink: { validator: [requiredValidator], messages: ["Video link is required"] },
     physicalHeight: { validator: [requiredValidator], messages: ["Physical height is required"] },
     physicalWidth: { validator: [requiredValidator], messages: ["Physical width is required"] },
     sharingText: { validator: [requiredValidator], messages: ["Sharing text is required"] }

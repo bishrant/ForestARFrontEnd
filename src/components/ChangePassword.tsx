@@ -81,13 +81,13 @@ const ResetPassword = (props: any) => {
                         <ValidatorForm className={classes.form} onSubmit={changePassword} onError={errors => console.log(errors)}>
 
                             <TextValidator label="Old Password" type="password" onChange={handleChange} name="oldpassword" variant="outlined" autoComplete="off"
-                                fullWidth value={form.oldpassword} validators={['required']} errorMessages={['Old Password is required']} />
+                                fullWidth value={form.oldpassword} validators={['required']} errorMessages={['Old Password is required']} inputProps={{"aria-label":"old Password"}} />
 
                             <TextValidator label="New Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
-                                fullWidth value={form.password} validators={['required']} errorMessages={['New password is required']} />
+                                fullWidth value={form.password} validators={['required']} errorMessages={['New password is required']} inputProps={{"aria-label":"new Password"}} />
 
                             <TextValidator label="Confirm new password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
-                                fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
+                                fullWidth value={form.password2} validators={['required', 'isPasswordMatch']} inputProps={{"aria-label":"confirm new Password"}}
                                 errorMessages={['Password is required', 'Password mismatch']} />
 
                             <Button fullWidth variant="contained" color="primary" type="submit" className={classes.submit}>

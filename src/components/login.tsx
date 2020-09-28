@@ -64,12 +64,12 @@ const Login = (props: any) => {
         <Typography component="h1" variant="h5"> Login </Typography>
         {error !== '' && <div className={`${classes.fullWidth} ${classes.error}`}>{error}</div>}
         <ValidatorForm className={classes.form} onSubmit={loginUser} onError={errors => console.log(errors)} >
-          <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined"
-            fullWidth value={form.email} validators={['required', 'isEmail']} autoComplete="off"
+          <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" 
+            fullWidth value={form.email} validators={['required', 'isEmail']} autoComplete="off" inputProps={{"aria-label":"EMAIL"}}
             errorMessages={['Email is required', 'Email is not valid']} />
 
           <TextValidator label="Password" type="password" onChange={handleChange}
-            name="password" variant="outlined" fullWidth value={form.password} autoComplete="off"
+            name="password" variant="outlined" fullWidth value={form.password} autoComplete="off" inputProps={{"aria-label":"Password"}}
             validators={['required']} errorMessages={['Password is required']} />
 
           <Button fullWidth variant="contained" color="primary"

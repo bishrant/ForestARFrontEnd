@@ -24,5 +24,9 @@ body {
 
 .MuiFab-root:hover {
   text-decoration: none;
-  background-color: rgb(19 179 191) !important;
+  background-color: rgb(16 127 135) !important;
+}
+
+.AppBar {
+  background-color: rgb(16 127 135);
 }

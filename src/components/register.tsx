@@ -70,19 +70,19 @@ export default function Register() {
         {success === false &&
           <div>
             <ValidatorForm className={classes.form} onSubmit={registerUser} onError={errors => console.log(errors)}>
-              <TextValidator label="First Name" onChange={handleChange} name="firstName" variant="outlined"
+              <TextValidator label="First Name" onChange={handleChange} name="firstName" variant="outlined" inputProps={{"aria-label":"First Name"}}
                aria-label="first name" fullWidth value={form.firstName} validators={['required']} errorMessages={['First name is required']} />
 
-              <TextValidator label="Last Name" onChange={handleChange} name="lastName" variant="outlined" fullWidth
+              <TextValidator label="Last Name" onChange={handleChange} name="lastName" variant="outlined" fullWidth inputProps={{"aria-label":"Last Name"}}
                 value={form.lastName} validators={['required']} errorMessages={['Last name is required']} />
 
-              <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth value={form.email}
+              <TextValidator label="Email" onChange={handleChange} name="email" variant="outlined" fullWidth value={form.email} inputProps={{"aria-label":"Email"}}
                 validators={['required', 'isEmail']} errorMessages={['Email is required', 'Email is not valid']} />
 
-              <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off"
+              <TextValidator label="Password" type="password" onChange={handleChange} name="password" variant="outlined" autoComplete="off" inputProps={{"aria-label":"Password"}}
                 fullWidth value={form.password} validators={['required']} errorMessages={['Password is required']} />
 
-              <TextValidator label="Confirm Password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off"
+              <TextValidator label="Confirm Password" type="password" onChange={handleChange} name="password2" variant="outlined" autoComplete="off" inputProps={{"aria-label":"Confirm Password"}}
                 fullWidth value={form.password2} validators={['required', 'isPasswordMatch']}
                 errorMessages={['Password is required', 'Password mismatch']} />
 
