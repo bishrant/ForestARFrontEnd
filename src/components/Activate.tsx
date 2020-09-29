@@ -11,7 +11,8 @@ const Activate = (props: any) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const token = props.match.params.token;
     const history = useHistory();
-    const activateToken = async (token: string) => {
+    const activateToken = () => {
+
         Axios.post(apiPath + "activate", { token: token })
             .then((r) => {
                 const success = r.data.success;
@@ -23,12 +24,8 @@ const Activate = (props: any) => {
             })
     }
 
-    useEffect(() => {
-        activateToken(token)
-        return () => {
-            console.log('done')
-        };
-    }, [])
+
+    useEffect(activateToken, [])
 
     const classes = formStyles();
     return (<Container component="main" maxWidth="xs">

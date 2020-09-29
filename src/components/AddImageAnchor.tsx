@@ -21,7 +21,7 @@ import { IconButton } from '@material-ui/core';
 import { apiPath } from '../utils/config';
 
 export default function AddImageAnchor() {
-    let { id } = useParams();
+    let { id } = useParams<any>();
     const classes = useStyles();
     const [uploadStatus, setUploadStatus] = useState('');
     const history = useHistory();
@@ -34,9 +34,7 @@ export default function AddImageAnchor() {
     });
     const populateForm = (data: any) => {
         const _f = populateEditForm(data, editForm, apiPath + 'public/');
-        console.log(_f);
         setEditForm(_f);
-        console.log(editForm)
         setFileNames({
             ...fileNames,
             imageName: data.imageName,
@@ -44,7 +42,7 @@ export default function AddImageAnchor() {
         })
     }
 
-    useEffect(() => {
+    const GetAnchorDetails = () => {
         if (typeof id !== 'undefined' && id !== null) {
             api.post(apiPath + 'getAnchorDetails/', { id: id })
                 .then((d: any) => {
@@ -52,7 +50,9 @@ export default function AddImageAnchor() {
                 })
                 .catch(() => setIsInvalid(true))
         }
-    }, [id])
+    };
+
+    useEffect(GetAnchorDetails, [id])
 
     const clearInput = (name: any) => {
         setEditForm({ ...editForm, [name]: '' })
@@ -68,7 +68,6 @@ export default function AddImageAnchor() {
         if (isValid) return;
 
         setShowbackDrop(true);
-        console.log(id);
         const formData = new FormData();
         const files: any = {};
         const d = { ...editForm };

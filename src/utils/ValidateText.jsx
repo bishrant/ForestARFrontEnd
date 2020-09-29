@@ -7,7 +7,6 @@ const ValidateText = (props) => {
   const { onChange, splitView, errorMsg, ...textFieldProps } = props;
   const theme = useTheme();
   const split = { ...splitView };
-  console.log(textFieldProps.maxLength)
   const isFullWidth = (Object.keys(split).length === 0) ? true : false;
   return <div className={isFullWidth ? 'coverDiv' : 'splitDiv'} theme={theme}>
     <TextField variant="outlined" onChange={props.onChange} fullWidth  {...textFieldProps} 

@@ -72,14 +72,19 @@ const ImageCard = (props: any) => {
           </Typography>
         </CardContent>
       {/* </CardActionArea> */}
-      <div style={{ margin: 'auto' }}>
-        <Button className={classes.deleteBtn} startIcon={<CreateIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
-          Edit</Button><br /><br />
-        <MuiThemeProvider theme={errorTheme}>
-          <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { props.onDelete(props.image.id) }} >
-            Delete</Button>
-        </MuiThemeProvider>
-      </div>
+      {parseInt(props.image.editable) === 1 && 
+            <div style={{ margin: 'auto' }}>
+            <Button className={classes.deleteBtn} startIcon={<CreateIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
+              Edit</Button><br /><br />
+            <MuiThemeProvider theme={errorTheme}>
+              <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { props.onDelete(props.image.id) }} >
+                Delete</Button>
+            </MuiThemeProvider>
+            
+          </div>
+      }
+
+
     </Card>
   );
 }

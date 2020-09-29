@@ -73,8 +73,6 @@ const App = (props: any) => {
     </SnackbarProvider>
   }
 
-  console.log(props.location.pathname, props.location.path, props.location);
-
   return (
     <MuiThemeProvider theme={theme}>
       {/* <ConfigProvider value={config}> */}

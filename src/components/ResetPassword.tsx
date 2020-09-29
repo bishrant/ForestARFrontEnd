@@ -52,17 +52,15 @@ const ResetPassword = (props: any) => {
         setForm({ ...form, [event.target.name]: val });
     }
 
-    useEffect(() => {
-        (async function anyFunctionName() {
-            Axios.post("/verifyEmailToken", { token: token, type: 'resetpassword' })
-                .then((r) => {
-                    if (!r.data.success) {
-                        showSnackbar(false, enqueueSnackbar, closeSnackbar, "Invalid or expired token.", '/login', history)
-                    }
-                })
-        })();
-
-    }, [])
+    const verifyEmailToken = () => {
+        Axios.post("/verifyEmailToken", { token: token, type: 'resetpassword' })
+        .then((r) => {
+            if (!r.data.success) {
+                showSnackbar(false, enqueueSnackbar, closeSnackbar, "Invalid or expired token.", '/login', history)
+            }
+        })
+    }
+    useEffect(verifyEmailToken, [])
 
     return (
         <Container component="main" maxWidth="xs">

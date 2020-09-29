@@ -10,6 +10,7 @@ const populateEditForm = (data: any, editForm: any, basepath : string= 'public/'
     _f.physicalWidth = data.physicalWidth;
     _f.physicalHeight = data.physicalHeight;
     _f.sharingText = data.sharingText;
+    _f.publicVideoLink = data.publicVideoLink;
     _f.imageName = basepath + data.folderName + "/" + data.imageName;
     _f.videoLink = basepath + data.folderName + "/" + data.videoLink;
     return _f;

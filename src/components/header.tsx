@@ -59,7 +59,7 @@ const Header = (props: any) => {
                             <img height="30" alt="tfs logo" id='logoimgLg' src={logo} />
                             <img height="30" alt="tfs logo" id='logoimgSm' src={logoStar} />
                             </a>
-                            <Link to="home" style={{ textDecoration: 'none' }} className="title"> Forest AR CMS</Link>
+                            <Link to="home" style={{ textDecoration: 'none' }} className="title"> Forest<span style={{color: '#EB5401'}}>AR</span> CMS</Link>
                             
                         </div>
                     </Grid>
