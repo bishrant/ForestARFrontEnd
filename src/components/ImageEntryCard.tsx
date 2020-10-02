@@ -38,10 +38,16 @@ const useStyles = makeStyles({
   deleteBtn: {
     maxHeight: '100px',
     margin: 'auto',
-    width: '100%',
+    width: '100px',
   },
   cardChildren: {
     flex: 1
+  },
+  cardcontent: {
+    padding: 0,
+    "&:last-child": {
+      paddingBottom: 0
+    }
   }
 });
 
@@ -70,21 +76,26 @@ const ImageCard = (props: any) => {
             <br />
             <a href={props.image.url} target="_blank" rel="noopener noreferrer">{props.image.url}</a>
           </Typography>
-        </CardContent>
-      {/* </CardActionArea> */}
-      {parseInt(props.image.editable) === 1 && 
-            <div style={{ margin: 'auto' }}>
+
+          {parseInt(props.image.editable) === 1 && 
+          
+            <div style={{ display: 'flex', marginTop: '10px' }}>
+             
             <Button className={classes.deleteBtn} startIcon={<CreateIcon />} onClick={() => { goToUpdate(history, props.image.id) }} >
-              Edit</Button><br /><br />
+              Edit</Button>
             <MuiThemeProvider theme={errorTheme}>
               <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} onClick={() => { props.onDelete(props.image.id) }} >
                 Delete</Button>
             </MuiThemeProvider>
             
           </div>
-      }
+      }<br/>
+       Author: {props.image.userEmail}
+        </CardContent>
+      {/* </CardActionArea> */}
 
 
+   
     </Card>
   );
 }

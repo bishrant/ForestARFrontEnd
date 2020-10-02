@@ -58,9 +58,14 @@ const theme = createMuiTheme({
             }
           },
         
-        MuiSnackbarContent: {
-            
-        } 
+          MuiCardContent: {
+            root: {
+              padding: 0,
+              "&:last-child": {
+                paddingBottom: 5,
+             },
+            },
+          },
     }
 })
 
